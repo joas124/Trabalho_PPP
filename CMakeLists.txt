@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(Projeto_PPP VERSION 0.1.0)
+project(trabalho VERSION 0.1.0)
+
+add_compile_options(-Wall -Wextra -Werror)
 
 include(CTest)
 enable_testing()
 
-add_compile_options(-Wall)
-
-add_executable(Projeto_PPP main.c)
+add_executable(trabalho main.c)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
