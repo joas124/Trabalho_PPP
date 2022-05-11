@@ -70,8 +70,10 @@ int eliminar_aluno(lista *l, int numero);
 
 /*
     ! Ordenar por ordem alfabética
+    * Return 1 se ordenou com sucesso
+    * Return 0 se não ordenou
 */
-void ordena_alfabetica(lista *l);
+int ordena_alfabeticamente(lista *l);
 
 /*
     ! Listar os alunos com saldo abaixo de um determinado valor (decrescente)
@@ -79,10 +81,17 @@ void ordena_alfabetica(lista *l);
 void listar_alunos_saldo(lista * l, double saldo);
 
 /*
+    ! Imprime dados do aluno
+*/
+void imprime_aluno(ALUNO *aluno);
+
+/*
     ! Procura aluno e mostra a sua informação toda
+    * Return 1 se encontrou
+    * Return 0 se não encontrou
     Usa o número de estudante para procurar
 */
-void procurar_aluno(lista *l, int numero);
+int procurar_aluno(lista *l, int numero);
 
 /*
     ! Mostra as despesas de um aluno
@@ -96,6 +105,6 @@ void mostrar_despesas(lista *l, int numero);
     * Return 0 se não carregou
     Usa o número de estudante
 */
-int carregar_conta(lista *l, double montante);
+int carregar_conta(lista *l, int numero, double montante);
 
 #endif //TRABALHO_PPP_AUX_H
