@@ -520,6 +520,33 @@ ContinuousSubmit/fast:
 	$(MAKE) -f CMakeFiles/ContinuousSubmit.dir/build.make CMakeFiles/ContinuousSubmit.dir/build
 .PHONY : ContinuousSubmit/fast
 
+aux.o: aux.c.o
+
+.PHONY : aux.o
+
+# target to build an object file
+aux.c.o:
+	$(MAKE) -f CMakeFiles/trabalho.dir/build.make CMakeFiles/trabalho.dir/aux.c.o
+.PHONY : aux.c.o
+
+aux.i: aux.c.i
+
+.PHONY : aux.i
+
+# target to preprocess a source file
+aux.c.i:
+	$(MAKE) -f CMakeFiles/trabalho.dir/build.make CMakeFiles/trabalho.dir/aux.c.i
+.PHONY : aux.c.i
+
+aux.s: aux.c.s
+
+.PHONY : aux.s
+
+# target to generate assembly for a file
+aux.c.s:
+	$(MAKE) -f CMakeFiles/trabalho.dir/build.make CMakeFiles/trabalho.dir/aux.c.s
+.PHONY : aux.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -587,6 +614,9 @@ help:
 	@echo "... ContinuousMemCheck"
 	@echo "... ContinuousTest"
 	@echo "... ContinuousSubmit"
+	@echo "... aux.o"
+	@echo "... aux.i"
+	@echo "... aux.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

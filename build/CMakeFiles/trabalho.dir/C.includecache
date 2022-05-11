@@ -6,7 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/main.c
+/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.c
+aux.h
+/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.h
 stdio.h
 -
+stdlib.h
+-
+string.h
+-
+
+/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.h
 
