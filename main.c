@@ -4,8 +4,9 @@
 
 int main() {
     /*
-        ! NÃO PEDIR SALDO INICIAL 
-        ! NÃO PEDIR DESPESAS INICIAIS
+        * NÃO PEDIR SALDO INICIAL 
+        * NÃO PEDIR DESPESAS INICIAIS
+        ! Logo em baixo são apenas os testes das funções por isso não apagar!
     */
     lista l;
     inicializa_lista(&l);
