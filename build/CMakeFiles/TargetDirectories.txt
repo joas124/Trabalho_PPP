@@ -1,0 +1,9 @@
+C:/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/Projeto_PPP.dir
+C:/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/NightlyMemoryCheck.dir
+C:/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/Experimental.dir
+C:/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/Continuous.dir
+C:/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/Nightly.dir
+C:/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/PACKAGE.dir
+C:/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/RUN_TESTS.dir
+C:/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/ZERO_CHECK.dir
