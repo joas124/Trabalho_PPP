@@ -2,6 +2,8 @@
 #include "aux.h"
 #include <stdlib.h>
 
+// TODO: Secção de testes (para não estar a testar no main.c)
+
 int main() {
     /*
         * NÃO PEDIR SALDO INICIAL 
@@ -11,7 +13,7 @@ int main() {
     lista l;
     inicializa_lista(&l);
     ALUNO aluno1 = {
-        "Mariana",
+        "Joao Anibal",
         {20, 11, 2003},
         {1, "A1"},
         2021218054,
@@ -20,7 +22,7 @@ int main() {
     };
     inserir_aluno(&l, &aluno1);
     ALUNO aluno2 = {
-        "Joao",
+        "Filipe",
         {10, 2, 2005},
         {1, "A1"},
         2021218124,
@@ -29,7 +31,7 @@ int main() {
     };
     inserir_aluno(&l, &aluno2);
     ALUNO aluno3 = {
-        "Filipe",
+        "Joao Animal",
         {30, 1, 2010},
         {1, "A1"},
         2021219958,
@@ -38,12 +40,19 @@ int main() {
     };
     inserir_aluno(&l, &aluno3);
 
+    /* TESTE PARA ELIMINAR ALUNO */
     // imprime_lista(&l);
     // eliminar_aluno(&l, 2021218124);
-    printf("\n----\n");
-    imprime_lista(&l);
-    printf("\n----\n");
-    ordena_alfabetica(&l);
-    imprime_lista(&l);
+    // imprime_lista(&l);
+
+    /* TESTE PARA ORDENAR LISTA */
+    // imprime_lista(&l);
+    // printf("\n-----------\n");
+    // ordena_alfabeticamente(&l);
+    // imprime_lista(&l);
+
+    /* TESTE PARA PROCURAR ALUNO */
+    procurar_aluno(&l, 2021218054);
+
     return 0;
 }
