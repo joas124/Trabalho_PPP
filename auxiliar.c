@@ -97,6 +97,7 @@ int ordena_alfabeticamente(lista *l) {
 
 /*
     ! Mostrar os alunos com saldo abaixo de um determinado valor (decrescente)
+    TODO
 */
 void listar_alunos_saldo(lista * l, double saldo);
 
@@ -115,45 +116,48 @@ void imprime_aluno(ALUNO *aluno) {
 
 /*
     ! Procura aluno e mostra a sua informação toda
-    * Return 1 se encontrou
-    * Return 0 se não encontrou
+    ? Função auxiliar
+    * Return ponteiro para aluno se encontrou
+    * Return NULL se não encontrou
     Usa o número de estudante para procurar
 */
-int procurar_aluno(lista *l, int numero) {
+ALUNO * procurar_aluno(lista *l, int numero) {
     no_lista *atual = l->inicio;
     while (atual != NULL) { // percorre a lista toda
         if (atual->aluno.numero == numero) {
-            imprime_aluno(&(atual->aluno));
-            return 1;
+            // imprime_aluno(&(atual->aluno));
+            return &(atual->aluno);
         }
         atual = atual->prox; // atual agora é o próximo
     }
-    return 0; // não teve successo
+    return NULL; // não teve successo
 }
 
 /*
     ! Mostra as despesas de um aluno
-    Usa o número de estudante para procurar
+    Chama a função de procurar o aluno
 */
 void mostrar_despesas(lista *l, int numero){
-    no_lista *atual = l->inicio;
-    while (atual != NULL){
-        if (atual->aluno.numero == numero){
-            NO_DESPESAS *desp = atual->aluno.despesas->inicio;
-            while (desp != NULL){
-                printf("%s: %lf\n%d/%d/%d\n",desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,desp->despesa.data.mes,desp->despesa.data.ano);
-                desp = desp->proximo;
-            }
-            return;
-        }
-        atual = atual->prox;
+    if (l == NULL) return;
+    ALUNO * aluno = procurar_aluno(l, numero);
+    if (aluno == NULL) return;
+    NO_DESPESAS *desp = aluno->despesas->inicio;
+    while (desp != NULL){
+        printf("%s: %lf\n%d/%d/%d\n",desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,desp->despesa.data.mes,desp->despesa.data.ano);
+        desp = desp->proximo;
     }
-    printf("O número de aluno inserido não existe");
 }
+
 /*
     ! Carregar conta de um aluno
     * Return 1 se carregou com sucesso
     * Return 0 se não carregou
-    Usa o número de estudante
+    Chama a função de procurar o aluno
 */
-int carregar_conta(lista *l, int numero, double montante);
+int carregar_conta(lista *l, int numero, double montante) {
+    if (l == NULL) return 0;
+    ALUNO * aluno = procurar_aluno(l, numero);
+    if (aluno == NULL) return 0;
+    aluno->saldo = aluno->saldo + montante;
+    return 1;
+}
