@@ -81,10 +81,13 @@ int main() {
   /* TESTE PARA MOSTRAS DESPESAS */
   // mostrar_despesas(&l, 2021218054);
 
-  /* TESTE PARA CARREGAR CARTÃO */
+  /* TESTE PARA CARREGAR CARTÃO
   imprime_aluno(procurar_aluno(&l, 2021218054));
   carregar_conta(&l, 2021218054, 10.40);
   imprime_aluno(procurar_aluno(&l, 2021218054));
+   */
 
+  /* TESTE PARA LISTAR OS SALDOS */
+  listar_alunos_saldo(&l, 100);
   return 0;
 }
