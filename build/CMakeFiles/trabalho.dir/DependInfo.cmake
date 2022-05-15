@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.c" "/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/trabalho.dir/aux.c.o"
+  "/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/auxiliar.c" "/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/trabalho.dir/auxiliar.c.o"
   "/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/main.c" "/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles/trabalho.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")

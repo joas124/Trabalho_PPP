@@ -520,32 +520,32 @@ ContinuousSubmit/fast:
 	$(MAKE) -f CMakeFiles/ContinuousSubmit.dir/build.make CMakeFiles/ContinuousSubmit.dir/build
 .PHONY : ContinuousSubmit/fast
 
-aux.o: aux.c.o
+auxiliar.o: auxiliar.c.o
 
-.PHONY : aux.o
+.PHONY : auxiliar.o
 
 # target to build an object file
-aux.c.o:
-	$(MAKE) -f CMakeFiles/trabalho.dir/build.make CMakeFiles/trabalho.dir/aux.c.o
-.PHONY : aux.c.o
+auxiliar.c.o:
+	$(MAKE) -f CMakeFiles/trabalho.dir/build.make CMakeFiles/trabalho.dir/auxiliar.c.o
+.PHONY : auxiliar.c.o
 
-aux.i: aux.c.i
+auxiliar.i: auxiliar.c.i
 
-.PHONY : aux.i
+.PHONY : auxiliar.i
 
 # target to preprocess a source file
-aux.c.i:
-	$(MAKE) -f CMakeFiles/trabalho.dir/build.make CMakeFiles/trabalho.dir/aux.c.i
-.PHONY : aux.c.i
+auxiliar.c.i:
+	$(MAKE) -f CMakeFiles/trabalho.dir/build.make CMakeFiles/trabalho.dir/auxiliar.c.i
+.PHONY : auxiliar.c.i
 
-aux.s: aux.c.s
+auxiliar.s: auxiliar.c.s
 
-.PHONY : aux.s
+.PHONY : auxiliar.s
 
 # target to generate assembly for a file
-aux.c.s:
-	$(MAKE) -f CMakeFiles/trabalho.dir/build.make CMakeFiles/trabalho.dir/aux.c.s
-.PHONY : aux.c.s
+auxiliar.c.s:
+	$(MAKE) -f CMakeFiles/trabalho.dir/build.make CMakeFiles/trabalho.dir/auxiliar.c.s
+.PHONY : auxiliar.c.s
 
 main.o: main.c.o
 
@@ -614,9 +614,9 @@ help:
 	@echo "... ContinuousMemCheck"
 	@echo "... ContinuousTest"
 	@echo "... ContinuousSubmit"
-	@echo "... aux.o"
-	@echo "... aux.i"
-	@echo "... aux.s"
+	@echo "... auxiliar.o"
+	@echo "... auxiliar.i"
+	@echo "... auxiliar.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

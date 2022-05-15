@@ -6,7 +6,7 @@
 },
 {
   "directory": "/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build",
-  "command": "/usr/bin/gcc   -g   -Wall -Wextra -Werror -o CMakeFiles/trabalho.dir/aux.c.o   -c /mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.c",
-  "file": "/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.c"
+  "command": "/usr/bin/gcc   -g   -Wall -Wextra -Werror -o CMakeFiles/trabalho.dir/auxiliar.c.o   -c /mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/auxiliar.c",
+  "file": "/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/auxiliar.c"
 }
 ]

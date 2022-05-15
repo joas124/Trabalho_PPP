@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.h
+/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/auxiliar.h
 
 /mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/main.c
 stdio.h
 -
-aux.h
-/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.h
+auxiliar.h
+/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/auxiliar.h
 stdlib.h
 -
 

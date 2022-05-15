@@ -110,7 +110,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "aux.c",
+			"path" : "auxiliar.c",
 			"sourceGroupIndex" : 0
 		}
 	],

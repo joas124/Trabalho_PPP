@@ -70,29 +70,29 @@ CMakeFiles/trabalho.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/trabalho.dir/main.c.s"
 	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/main.c -o CMakeFiles/trabalho.dir/main.c.s
 
-CMakeFiles/trabalho.dir/aux.c.o: CMakeFiles/trabalho.dir/flags.make
-CMakeFiles/trabalho.dir/aux.c.o: ../aux.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/trabalho.dir/aux.c.o"
-	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/trabalho.dir/aux.c.o   -c /mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.c
+CMakeFiles/trabalho.dir/auxiliar.c.o: CMakeFiles/trabalho.dir/flags.make
+CMakeFiles/trabalho.dir/auxiliar.c.o: ../auxiliar.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/trabalho.dir/auxiliar.c.o"
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/trabalho.dir/auxiliar.c.o   -c /mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/auxiliar.c
 
-CMakeFiles/trabalho.dir/aux.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/trabalho.dir/aux.c.i"
-	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.c > CMakeFiles/trabalho.dir/aux.c.i
+CMakeFiles/trabalho.dir/auxiliar.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/trabalho.dir/auxiliar.c.i"
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/auxiliar.c > CMakeFiles/trabalho.dir/auxiliar.c.i
 
-CMakeFiles/trabalho.dir/aux.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/trabalho.dir/aux.c.s"
-	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/aux.c -o CMakeFiles/trabalho.dir/aux.c.s
+CMakeFiles/trabalho.dir/auxiliar.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/trabalho.dir/auxiliar.c.s"
+	/usr/bin/gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/auxiliar.c -o CMakeFiles/trabalho.dir/auxiliar.c.s
 
 # Object files for target trabalho
 trabalho_OBJECTS = \
 "CMakeFiles/trabalho.dir/main.c.o" \
-"CMakeFiles/trabalho.dir/aux.c.o"
+"CMakeFiles/trabalho.dir/auxiliar.c.o"
 
 # External object files for target trabalho
 trabalho_EXTERNAL_OBJECTS =
 
 trabalho: CMakeFiles/trabalho.dir/main.c.o
-trabalho: CMakeFiles/trabalho.dir/aux.c.o
+trabalho: CMakeFiles/trabalho.dir/auxiliar.c.o
 trabalho: CMakeFiles/trabalho.dir/build.make
 trabalho: CMakeFiles/trabalho.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/Utilizador/Documents/GitHub/Trabalho_PPP/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable trabalho"
