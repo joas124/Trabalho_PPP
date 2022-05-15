@@ -135,8 +135,21 @@ int procurar_aluno(lista *l, int numero) {
     ! Mostra as despesas de um aluno
     Usa o número de estudante para procurar
 */
-void mostrar_despesas(lista *l, int numero);
-
+void mostrar_despesas(lista *l, int numero){
+    no_lista *atual = l->inicio;
+    while (atual != NULL){
+        if (atual->aluno.numero == numero){
+            NO_DESPESAS *desp = atual->aluno.despesas->inicio;
+            while (desp != NULL){
+                printf("%s: %lf\n%d/%d/%d\n",desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,desp->despesa.data.mes,desp->despesa.data.ano);
+                desp = desp->proximo;
+            }
+            return;
+        }
+        atual = atual->prox;
+    }
+    printf("O número de aluno inserido não existe");
+}
 /*
     ! Carregar conta de um aluno
     * Return 1 se carregou com sucesso

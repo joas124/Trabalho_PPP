@@ -13,31 +13,49 @@ int main() {
     */
     lista l;
     inicializa_lista(&l);
+
+    NO_DESPESAS despesas2 = {
+            {100,
+             "Drogas",
+             {15, 05, 2022}},
+            NULL
+
+    };
+    NO_DESPESAS despesas1 = {
+            {0.99,
+             "Simas Turbo",
+             {15, 05, 2022}},
+            &despesas2
+    };
+    LISTA_DESPESAS despesas = {
+            &despesas1
+    };
+
     ALUNO aluno1 = {
-        "Joao Anibal",
-        {20, 11, 2003},
-        {1, "A1"},
-        2021218054,
-        100.0,
-        NULL
+            "Joao Anibal",
+            {20, 11, 2003},
+            {1, "A1"},
+            2021218054,
+            100.0,
+            &despesas
     };
     inserir_aluno(&l, &aluno1);
     ALUNO aluno2 = {
-        "Filipe",
-        {10, 2, 2005},
-        {1, "A1"},
-        2021218124,
-        103.24,
-        NULL
+            "Filipe",
+            {10, 2, 2005},
+            {1, "A1"},
+            2021218124,
+            103.24,
+            NULL
     };
     inserir_aluno(&l, &aluno2);
     ALUNO aluno3 = {
-        "Joao Animal",
-        {30, 1, 2010},
-        {1, "A1"},
-        2021219958,
-        23.64,
-        NULL
+            "Joao Animal",
+            {30, 1, 2010},
+            {1, "A1"},
+            2021219958,
+            23.64,
+            NULL
     };
     inserir_aluno(&l, &aluno3);
 
@@ -52,8 +70,11 @@ int main() {
     // ordena_alfabeticamente(&l);
     // imprime_lista(&l);
 
-    /* TESTE PARA PROCURAR ALUNO */
+    /* TESTE PARA PROCURAR ALUNO
     procurar_aluno(&l, 2021218054);
+     */
 
+    /* TESTE PARA MOSTRAS DESPESAS */
+    mostrar_despesas(&l, 2021218054);
     return 0;
 }

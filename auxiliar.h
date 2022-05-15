@@ -13,7 +13,7 @@ typedef struct turma {
 } TURMA; // 1º ano de turma A1
 
 typedef struct despesas {
-    int valor;
+    double valor;
     char descricao[100];
     DATA data;
 } DESPESAS;
@@ -23,13 +23,17 @@ typedef struct no_despesas {
     struct no_despesas *proximo;
 } NO_DESPESAS;
 
+typedef struct lista_despesas{
+    struct no_despesas *inicio;
+} LISTA_DESPESAS;
+
 typedef struct aluno {
     char nome[101];
     DATA data_nascismento;
     TURMA turma;
     int numero; // numero de estudante
     double saldo; // só numeros positivos
-    DESPESAS * despesas;
+    LISTA_DESPESAS *despesas; // antes era um pointer para uma só despesa, agora é para a lista ligada de despesas
 } ALUNO;
 
 typedef struct no_lista {
