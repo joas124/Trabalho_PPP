@@ -1,5 +1,5 @@
-#ifndef TRABALHO_PPP_AUX_H
-#define TRABALHO_PPP_AUX_H
+#ifndef TRABALHO_PPP_AUXILIAR_H
+#define TRABALHO_PPP_AUXILIAR_H
 
 typedef struct data {
     int dia;
@@ -91,15 +91,16 @@ void imprime_aluno(ALUNO *aluno);
 
 /*
     ! Procura aluno e mostra a sua informação toda
-    * Return 1 se encontrou
-    * Return 0 se não encontrou
+    ? Função auxiliar
+    * Return ponteiro para aluno se encontrou
+    * Return NULL se não encontrou
     Usa o número de estudante para procurar
 */
-int procurar_aluno(lista *l, int numero);
+ALUNO * procurar_aluno(lista *l, int numero);
 
 /*
     ! Mostra as despesas de um aluno
-    Usa o número de estudante para procurar
+    Chama a função de procurar o aluno
 */
 void mostrar_despesas(lista *l, int numero);
 
@@ -107,8 +108,8 @@ void mostrar_despesas(lista *l, int numero);
     ! Carregar conta de um aluno
     * Return 1 se carregou com sucesso
     * Return 0 se não carregou
-    Usa o número de estudante
+    Chama a função de procurar o aluno
 */
 int carregar_conta(lista *l, int numero, double montante);
 
-#endif //TRABALHO_PPP_AUX_H
+#endif //TRABALHO_PPP_AUXILIAR_H
