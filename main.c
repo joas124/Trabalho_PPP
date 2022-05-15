@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "aux.h"
+#include "auxiliar.h"
 #include <stdlib.h>
 
 // TODO: Secção de testes (para não estar a testar no main.c)
