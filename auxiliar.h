@@ -23,7 +23,8 @@ typedef struct no_despesas {
     struct no_despesas *proximo;
 } NO_DESPESAS;
 
-typedef struct lista_despesas{
+typedef struct lista_despesas
+{
     struct no_despesas *inicio;
 } LISTA_DESPESAS;
 

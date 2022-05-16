@@ -7,7 +7,7 @@
 
 int main() {
   /*
-    * NÃO PEDIR SALDO INICIAL 
+    * NÃO PEDIR SALDO INICIAL
     * NÃO PEDIR DESPESAS INICIAIS
     ! Logo em baixo são apenas os testes das funções por isso não apagar!
   */
@@ -17,21 +17,15 @@ int main() {
 
 
   NO_DESPESAS despesas2 = {
-    {
-      100,
-      "Drogas",
-      {15, 05, 2022}
-    },
-    NULL
-  };
+      {100,
+        "Drogas",
+        {15, 05, 2022}},
+      NULL};
   NO_DESPESAS despesas1 = {
-    {
-      5.34,
-      "Putas",
-      {15, 05, 2022}
-    },
-    &despesas2
-  };
+      {5.34,
+        "Putas",
+        {15, 05, 2022}},
+      &despesas2};
   LISTA_DESPESAS despesas = {
     &despesas1
   };
@@ -84,13 +78,13 @@ int main() {
   /* TESTE PARA MOSTRAS DESPESAS */
   // mostrar_despesas(&l, 2021218054);
 
-  /* TESTE PARA CARREGAR CARTÃO
+  /* TESTE PARA CARREGAR CARTÃO */
   imprime_aluno(procurar_aluno(&l, 2021218054));
   carregar_conta(&l, 2021218054, 10.40);
   imprime_aluno(procurar_aluno(&l, 2021218054));
-   */
+
 
   /* TESTE PARA LISTAR OS SALDOS */
-  listar_alunos_saldo(&l, 100);
+  // listar_alunos_saldo(&l, 100);
   return 0;
 }
