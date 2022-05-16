@@ -2,11 +2,7 @@
 #include "auxiliar.h"
 #include <stdlib.h>
 
-// TODO: Secção de testes (para não estar a testar no main.c)
-// ! Pedir ajudar ao professor sobre isto
-
-int main()
-{
+int main() {
   /*
     * NÃO PEDIR SALDO INICIAL
     * NÃO PEDIR DESPESAS INICIAIS
@@ -17,13 +13,13 @@ int main()
 
   NO_DESPESAS despesas2 = {
       {100,
-       "Drogas",
-       {15, 05, 2022}},
+        "Drogas",
+        {15, 05, 2022}},
       NULL};
   NO_DESPESAS despesas1 = {
       {5.34,
-       "Putas",
-       {15, 05, 2022}},
+        "Putas",
+        {15, 05, 2022}},
       &despesas2};
   LISTA_DESPESAS despesas = {
       &despesas1};
