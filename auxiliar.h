@@ -46,6 +46,8 @@ typedef struct lista {
     struct no_lista *inicio;
 } lista;
 
+void clean();
+
 /*
     ! Inicializa a lista
     * Return 1 se inicializou com sucesso
@@ -113,6 +115,9 @@ void mostrar_despesas(lista *l, int numero);
 */
 int carregar_conta(lista *l, int numero, double montante);
 
+/*
+    ! Mostra o menu completo
+*/
 void menu(lista *l);
 
 #endif //TRABALHO_PPP_AUXILIAR_H
