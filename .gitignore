@@ -2,3 +2,5 @@ HOLD/
 build/
 .vscode/settings.json
 CMakeLists.txt
+cmake-build-debug/
+.idea/
