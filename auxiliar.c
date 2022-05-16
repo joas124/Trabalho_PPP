@@ -112,7 +112,8 @@ void listar_alunos_saldo(lista *l, double saldo) {
     while (atual != NULL) {
         double *saldoantigo = &atual->aluno.saldo;
         double *saldonovo = &novalista->inicio->aluno.saldo; // Só criei estas variáveis para o código dos if's ser menos poluído
-        if (*saldoantigo <= saldo && (novalista->inicio == NULL || *saldonovo <= *saldoantigo)) { // Simplesmente adiciona um aluno ao topo da lista
+        if (*saldoantigo <= saldo && (novalista->inicio == NULL ||
+                                      *saldonovo <= *saldoantigo)) { // Simplesmente adiciona um aluno ao topo da lista
             no_lista *novo = malloc(sizeof(no_lista)); // Aloca espaço na nova lista
             if (novo == NULL)
                 break; // TODO Talvez aqui seja melhor um return, mas ainda tenho de perguntar ao professor
