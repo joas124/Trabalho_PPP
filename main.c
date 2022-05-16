@@ -2,9 +2,6 @@
 #include "auxiliar.h"
 #include <stdlib.h>
 
-// TODO: Secção de testes (para não estar a testar no main.c)
-// ! Pedir ajudar ao professor sobre isto
-
 int main() {
   /*
     * NÃO PEDIR SALDO INICIAL

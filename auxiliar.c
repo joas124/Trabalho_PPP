@@ -172,7 +172,7 @@ void imprime_aluno(ALUNO *aluno)
 {
     printf("Nome: %s\n", aluno->nome);
     printf("Data de nascimento: %d/%d/%d\n", aluno->data_nascismento.dia, aluno->data_nascismento.mes,
-           aluno->data_nascismento.ano);
+            aluno->data_nascismento.ano);
     printf("Turma: %dº %s\n", aluno->turma.ano, aluno->turma.sigla);
     printf("Numero: %d\n", aluno->numero);
     printf("Saldo: %.2f\n", aluno->saldo);
@@ -216,7 +216,7 @@ void mostrar_despesas(lista *l, int numero)
     while (desp != NULL)
     {
         printf("%s: %lf\n%d/%d/%d\n", desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,
-               desp->despesa.data.mes, desp->despesa.data.ano);
+                desp->despesa.data.mes, desp->despesa.data.ano);
         desp = desp->proximo;
     }
 }
@@ -239,6 +239,7 @@ int carregar_conta(lista *l, int numero, double montante)
     aluno->saldo = saldo / 100.0;
     return 1;
 }
+
 void menu(lista *l){
     int n = 0;
     printf("1 - Introduzir um novo aluno\n");
