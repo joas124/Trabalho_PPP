@@ -202,3 +202,65 @@ int carregar_conta(lista *l, int numero, double montante) {
     aluno->saldo = aluno->saldo + montante;
     return 1;
 }
+void menu(lista *l){
+    int n = 0;
+    printf("1 - Introduzir um novo aluno\n");
+    printf("2 - Eliminar um aluno existente\n");
+    printf("3 - Listar os alunos por ordem alfabética\n");
+    printf("4 - Listar os alunos com saldo abaixo de um determinado valor\n");
+    printf("5 - Apresentar toda a informação de um aluno\n");
+    printf("6 - Efectuar uma despesa para um aluno\n");
+    printf("7 - Carregar a conta de um aluno\n\n");
+    printf("Digite o número correspondente à operação que quer realizar:");
+    scanf("%d", &n);
+    switch (n) {
+        case 1: {
+            // TODO
+            break;
+        }
+        case 2: {
+            int numeroaluno;
+            printf("Digite o número do aluno que quer eliminar:");
+            scanf("%d", &numeroaluno);
+            if (eliminar_aluno(l, numeroaluno) == 1) printf("O aluno foi eliminado com sucesso\n");
+            else printf("Não existe um aluno com este número\n");
+            break;
+        }
+        case 3:
+            ordena_alfabeticamente(l);
+            imprime_lista(l);
+            break;
+        case 4:{
+            double saldo = 0;
+            printf("Digite o saldo:");
+            scanf("%lf",&saldo);
+            listar_alunos_saldo(l, saldo);
+            break;
+        }
+        case 5:{
+            int numeroaluno;
+            printf("Digite o número do aluno:");
+            scanf("%d", &numeroaluno);
+            imprime_aluno(procurar_aluno(l, numeroaluno));
+            break;
+        }
+        case 6:{
+            // TODO
+            break;
+        }
+        case 7:{
+            int numeroaluno;
+            double saldo;
+            printf("Digite o número do aluno:");
+            scanf("%d", &numeroaluno);
+            printf("Digite o valor que queres carregar:");
+            scanf("%lf", &saldo);
+            carregar_conta(l, numeroaluno, saldo);
+            break;
+        }
+        default:
+            printf("Insira um número válido\n");
+            menu(l);
+            return;
+    }
+}
