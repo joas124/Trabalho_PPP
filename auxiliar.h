@@ -10,7 +10,7 @@ typedef struct data {
 typedef struct turma {
     int ano;       // ex: 1
     char sigla[3]; // ex: "A1"
-} TURMA;           // 1º ano de turma A1
+} TURMA; // 1º ano de turma A1
 
 typedef struct despesas {
     double valor;
@@ -23,7 +23,8 @@ typedef struct no_despesas {
     struct no_despesas *proximo;
 } NO_DESPESAS;
 
-typedef struct lista_despesas {
+typedef struct lista_despesas
+{
     struct no_despesas *inicio;
 } LISTA_DESPESAS;
 
@@ -31,8 +32,8 @@ typedef struct aluno {
     char nome[101];
     DATA data_nascismento;
     TURMA turma;
-    int numero;               // numero de estudante
-    double saldo;             // só numeros positivos
+    int numero; // numero de estudante
+    double saldo; // só numeros positivos
     LISTA_DESPESAS *despesas; // antes era um pointer para uma só despesa, agora é para a lista ligada de despesas
 } ALUNO;
 
@@ -62,7 +63,7 @@ void imprime_lista(lista *l);
     * Return 1 se inseriu com sucesso
     * Return 0 se não inseriu
 */
-int inserir_aluno(lista *l, ALUNO *aluno);
+int inserir_aluno(lista * l, ALUNO *aluno);
 
 /*
     ! Eliminar um aluno
@@ -82,7 +83,7 @@ int ordena_alfabeticamente(lista *l);
 /*
     ! Listar os alunos com saldo abaixo de um determinado valor (decrescente)
 */
-void listar_alunos_saldo(lista *l, double saldo);
+void listar_alunos_saldo(lista * l, double saldo);
 
 /*
     ! Imprime dados do aluno
@@ -96,7 +97,7 @@ void imprime_aluno(ALUNO *aluno);
     * Return NULL se não encontrou
     Usa o número de estudante para procurar
 */
-ALUNO *procurar_aluno(lista *l, int numero);
+ALUNO * procurar_aluno(lista *l, int numero);
 
 /*
     ! Mostra as despesas de um aluno
@@ -112,4 +113,6 @@ void mostrar_despesas(lista *l, int numero);
 */
 int carregar_conta(lista *l, int numero, double montante);
 
-#endif // TRABALHO_PPP_AUXILIAR_H
+void menu(lista *l);
+
+#endif //TRABALHO_PPP_AUXILIAR_H

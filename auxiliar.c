@@ -8,8 +8,10 @@
     * Return 1 se inicializou com sucesso
     * Return 0 se não conseguiu inicializar
 */
-int inicializa_lista(lista *l) {
-    if (l == NULL) return 0;
+int inicializa_lista(lista *l)
+{
+    if (l == NULL)
+        return 0;
     l->inicio = NULL;
     return 1;
 }
@@ -17,10 +19,13 @@ int inicializa_lista(lista *l) {
 /*
     ! Imprime a lista
 */
-void imprime_lista(lista *l) {
-    if (l == NULL) return;
+void imprime_lista(lista *l)
+{
+    if (l == NULL)
+        return;
     no_lista *aux = l->inicio;
-    while (aux != NULL) { // percorre a lista
+    while (aux != NULL)
+    { // percorre a lista
         printf("Nome: %s\n", aux->aluno.nome);
         printf("Data de nascimento: %d/%d/%d\n", aux->aluno.data_nascismento.dia, aux->aluno.data_nascismento.mes,
                aux->aluno.data_nascismento.ano);
@@ -37,10 +42,13 @@ void imprime_lista(lista *l) {
     * Return 1 se inseriu com sucesso
     * Return 0 se não inseriu
 */
-int inserir_aluno(lista *l, ALUNO *aluno) {
-    if (l == NULL) return 0;
+int inserir_aluno(lista *l, ALUNO *aluno)
+{
+    if (l == NULL)
+        return 0;
     no_lista *novo = malloc(sizeof(no_lista)); // reserva espaço para o novo aluno
-    if (novo == NULL) return 0; // se não conseguir reservar acaba a função
+    if (novo == NULL)
+        return 0;           // se não conseguir reservar acaba a função
     novo->aluno = *aluno;   // novo aluno é o aluno passado por parâmetro
     novo->prox = l->inicio; // o aluno asseguir ao novo agora é o inicio da lista
     l->inicio = novo;       // o inicio é o novo aluno
@@ -53,13 +61,18 @@ int inserir_aluno(lista *l, ALUNO *aluno) {
     * Return 0 se não eliminou
     Usa o número de estudante para procurar pelo aluno
 */
-int eliminar_aluno(lista *l, int numero) {
+int eliminar_aluno(lista *l, int numero)
+{
     no_lista *atual = l->inicio;
     no_lista *ant = NULL;
-    while (atual != NULL) { // percorre a lista toda
-        if (atual->aluno.numero == numero) {
-            if (ant == NULL) l->inicio = atual->prox; // no caso de ser o primeiro aluno da lista: o inicio passa a ser o segundo aluno
-            else ant->prox = atual->prox; // nos outros casos: anterior aponta para o proximo
+    while (atual != NULL)
+    { // percorre a lista toda
+        if (atual->aluno.numero == numero)
+        {
+            if (ant == NULL)
+                l->inicio = atual->prox; // no caso de ser o primeiro aluno da lista: o inicio passa a ser o segundo aluno
+            else
+                ant->prox = atual->prox; // nos outros casos: anterior aponta para o proximo
             free(atual);                 // liberta a memoria do aluno
             return 1;                    // retorna 1 porque já foi eliminado
         }
@@ -76,13 +89,18 @@ int eliminar_aluno(lista *l, int numero) {
     * Return 1 se ordenou com sucesso
     * Return 0 se não ordenou
 */
-int ordena_alfabeticamente(lista *l) {
-    if (l == NULL) return 0;
+int ordena_alfabeticamente(lista *l)
+{
+    if (l == NULL)
+        return 0;
     no_lista *atual = l->inicio;
-    while (atual != NULL) {
+    while (atual != NULL)
+    {
         no_lista *prox = atual->prox; // proximo é o proximo do atual
-        while (prox != NULL) {
-            if (strcmp(atual->aluno.nome, prox->aluno.nome) > 0) {
+        while (prox != NULL)
+        {
+            if (strcmp(atual->aluno.nome, prox->aluno.nome) > 0)
+            {
                 ALUNO aux = atual->aluno;   // guarda o aluno atual
                 atual->aluno = prox->aluno; // troca o aluno atual com o proximo
                 prox->aluno = aux;          // troca o proximo com o aluno atual
@@ -98,34 +116,42 @@ int ordena_alfabeticamente(lista *l) {
     ! Mostrar os alunos com saldo abaixo de um determinado valor (decrescente)
     TODO: Provavelmente há uma maneira mais eficaz de fazer isso (NÃO FAZER UMA FUNÇÃO QUE PERCORRE A LISTA "l" MAIS DE UMA VEZ)
 */
-void listar_alunos_saldo(lista *l, double saldo) {
-    if (l == NULL) return;
+void listar_alunos_saldo(lista *l, double saldo)
+{
+    if (l == NULL)
+        return;
     lista *novalista = malloc(sizeof(lista)); // Criar nova lista para os alunos com saldo inferior a "saldo"
-    if (novalista == NULL) return; // Se não for possível alocar espaço, a função acaba
+    if (novalista == NULL)
+        return; // Se não for possível alocar espaço, a função acaba
     novalista->inicio = NULL;
     no_lista *atual = l->inicio; // Ponteiro para percorrer a lista original
     no_lista *auxprox = NULL;    // Ponteiro auxilar para guardar a localização do próximo
     no_lista *auxatual = NULL;   // ''   ''  ''  ''  ''  ''  ''  ''  ''  ''  ''   atual (só é usado caso a lista nova já possua um elemento maior que o atual)
-    while (atual != NULL) {
+    while (atual != NULL)
+    {
         double *saldoantigo = &atual->aluno.saldo;
         double *saldonovo = &novalista->inicio->aluno.saldo; // Só criei estas variáveis para o código dos if's ser menos poluído
         if (*saldoantigo <= saldo && (novalista->inicio == NULL ||
                                       *saldonovo <= *saldoantigo))
         {                                              // Simplesmente adiciona um aluno ao topo da lista
             no_lista *novo = malloc(sizeof(no_lista)); // Aloca espaço na nova lista
-            if (novo == NULL) break; // TODO Talvez aqui seja melhor um return, mas ainda tenho de perguntar ao professor
+            if (novo == NULL)
+                break; // TODO Talvez aqui seja melhor um return, mas ainda tenho de perguntar ao professor
             novo->aluno = atual->aluno;
             novo->prox = novalista->inicio;
             novalista->inicio = novo;
         }
-        else if (*saldoantigo <= saldo && *saldoantigo < *saldonovo) {
+        else if (*saldoantigo <= saldo && *saldoantigo < *saldonovo)
+        {
             // Caso o saldo seja menor que o número, mas o primeiro elemento da lista nova seja maior
             no_lista *novo = malloc(sizeof(no_lista)); // Aloca espaço na nova lista
-            if (novo == NULL) break; // TODO
+            if (novo == NULL)
+                break; // TODO
             novo->aluno = atual->aluno;
             auxatual = novalista->inicio;
             auxprox = novalista->inicio->prox;
-            while (auxatual->aluno.saldo > *saldonovo) {
+            while (auxatual->aluno.saldo > *saldonovo)
+            {
                 // Percorrer a lista nova até encontrar um elemento com menor saldo
                 auxatual = auxprox;
                 auxprox = auxatual->prox;
@@ -142,7 +168,8 @@ void listar_alunos_saldo(lista *l, double saldo) {
     ! Imprime dados do aluno
     ? Função auxiliar
 */
-void imprime_aluno(ALUNO *aluno) {
+void imprime_aluno(ALUNO *aluno)
+{
     printf("Nome: %s\n", aluno->nome);
     printf("Data de nascimento: %d/%d/%d\n", aluno->data_nascismento.dia, aluno->data_nascismento.mes,
             aluno->data_nascismento.ano);
@@ -159,10 +186,13 @@ void imprime_aluno(ALUNO *aluno) {
     * Return NULL se não encontrou
     Usa o número de estudante para procurar
 */
-ALUNO *procurar_aluno(lista *l, int numero) {
+ALUNO *procurar_aluno(lista *l, int numero)
+{
     no_lista *atual = l->inicio;
-    while (atual != NULL) { // percorre a lista toda
-        if (atual->aluno.numero == numero) {
+    while (atual != NULL)
+    { // percorre a lista toda
+        if (atual->aluno.numero == numero)
+        {
             // imprime_aluno(&(atual->aluno));
             return &(atual->aluno);
         }
@@ -175,12 +205,16 @@ ALUNO *procurar_aluno(lista *l, int numero) {
     ! Mostra as despesas de um aluno
     Chama a função de procurar o aluno
 */
-void mostrar_despesas(lista *l, int numero) {
-    if (l == NULL) return;
+void mostrar_despesas(lista *l, int numero)
+{
+    if (l == NULL)
+        return;
     ALUNO *aluno = procurar_aluno(l, numero);
-    if (aluno == NULL) return;
+    if (aluno == NULL)
+        return;
     NO_DESPESAS *desp = aluno->despesas->inicio;
-    while (desp != NULL) {
+    while (desp != NULL)
+    {
         printf("%s: %lf\n%d/%d/%d\n", desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,
                 desp->despesa.data.mes, desp->despesa.data.ano);
         desp = desp->proximo;
@@ -193,12 +227,78 @@ void mostrar_despesas(lista *l, int numero) {
     * Return 0 se não carregou
     Chama a função de procurar o aluno
 */
-int carregar_conta(lista *l, int numero, double montante) {
-    if (l == NULL) return 0;
+int carregar_conta(lista *l, int numero, double montante)
+{
+    if (l == NULL)
+        return 0;
     ALUNO *aluno = procurar_aluno(l, numero);
-    if (aluno == NULL) return 0;
+    if (aluno == NULL)
+        return 0;
     unsigned int saldo = (aluno->saldo * 100);
     saldo += (montante * 100);
     aluno->saldo = saldo / 100.0;
     return 1;
+}
+
+void menu(lista *l){
+    int n = 0;
+    printf("1 - Introduzir um novo aluno\n");
+    printf("2 - Eliminar um aluno existente\n");
+    printf("3 - Listar os alunos por ordem alfabética\n");
+    printf("4 - Listar os alunos com saldo abaixo de um determinado valor\n");
+    printf("5 - Apresentar toda a informação de um aluno\n");
+    printf("6 - Efectuar uma despesa para um aluno\n");
+    printf("7 - Carregar a conta de um aluno\n\n");
+    printf("Digite o número correspondente à operação que quer realizar:");
+    scanf("%d", &n);
+    switch (n) {
+        case 1: {
+            // TODO
+            break;
+        }
+        case 2: {
+            int numeroaluno;
+            printf("Digite o número do aluno que quer eliminar:");
+            scanf("%d", &numeroaluno);
+            if (eliminar_aluno(l, numeroaluno) == 1) printf("O aluno foi eliminado com sucesso\n");
+            else printf("Não existe um aluno com este número\n");
+            break;
+        }
+        case 3:
+            ordena_alfabeticamente(l);
+            imprime_lista(l);
+            break;
+        case 4:{
+            double saldo = 0;
+            printf("Digite o saldo:");
+            scanf("%lf",&saldo);
+            listar_alunos_saldo(l, saldo);
+            break;
+        }
+        case 5:{
+            int numeroaluno;
+            printf("Digite o número do aluno:");
+            scanf("%d", &numeroaluno);
+            imprime_aluno(procurar_aluno(l, numeroaluno));
+            break;
+        }
+        case 6:{
+            // TODO
+            break;
+        }
+        case 7:{
+            int numeroaluno;
+            double saldo;
+            printf("Digite o número do aluno:");
+            scanf("%d", &numeroaluno);
+            printf("Digite o valor que queres carregar:");
+            scanf("%lf", &saldo);
+            carregar_conta(l, numeroaluno, saldo);
+            break;
+        }
+        default:
+            printf("Insira um número válido\n");
+            menu(l);
+            return;
+    }
 }
