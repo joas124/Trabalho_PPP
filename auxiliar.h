@@ -1,39 +1,33 @@
 #ifndef TRABALHO_PPP_AUXILIAR_H
 #define TRABALHO_PPP_AUXILIAR_H
 
-typedef struct data
-{
+typedef struct data {
     int dia;
     int mes;
     int ano;
 } DATA;
 
-typedef struct turma
-{
+typedef struct turma {
     int ano;       // ex: 1
     char sigla[3]; // ex: "A1"
 } TURMA;           // 1º ano de turma A1
 
-typedef struct despesas
-{
+typedef struct despesas {
     double valor;
     char descricao[100];
     DATA data;
 } DESPESAS;
 
-typedef struct no_despesas
-{
+typedef struct no_despesas {
     DESPESAS despesa;
     struct no_despesas *proximo;
 } NO_DESPESAS;
 
-typedef struct lista_despesas
-{
+typedef struct lista_despesas {
     struct no_despesas *inicio;
 } LISTA_DESPESAS;
 
-typedef struct aluno
-{
+typedef struct aluno {
     char nome[101];
     DATA data_nascismento;
     TURMA turma;
@@ -42,14 +36,12 @@ typedef struct aluno
     LISTA_DESPESAS *despesas; // antes era um pointer para uma só despesa, agora é para a lista ligada de despesas
 } ALUNO;
 
-typedef struct no_lista
-{
+typedef struct no_lista {
     ALUNO aluno;
     struct no_lista *prox;
 } no_lista;
 
-typedef struct lista
-{
+typedef struct lista {
     struct no_lista *inicio;
 } lista;
 
