@@ -2,7 +2,7 @@
 #include "auxiliar.h"
 #include <stdlib.h>
 
-int main() {
+int main(void) {
   /*
     * NÃO PEDIR SALDO INICIAL
     * NÃO PEDIR DESPESAS INICIAIS
