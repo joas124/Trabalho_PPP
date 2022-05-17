@@ -36,10 +36,31 @@ void opcoes();
 int len(int n);
 
 /*
-    ! Pede alunos
-    * Return ponteiro para lista de alunos se tudo correu bem
-    * Return NULL se algum dos dados foi inserido incorretamente
+    ! Verifica Data
+    * Return 1 se for válida
+    * Return 0 se for inválida
 */
-ALUNO * pede_aluno();
+int verifica_data(DATA * d);
+
+/*
+    ! Verifica Numero de estudante
+    * Return 1 se for válida
+    * Return 0 se for inválida
+*/
+int verifica_numero(int numero);
+
+/*
+    ! Verifica turma
+    * Return 1 se for inválida
+    * Return 0 se for válida
+*/
+int verifica_turma(TURMA *t);
+
+/*
+    ! Confirmar passo
+    * Return 1 se confirmar
+    * Return 0 se não confirmar
+*/
+int confirmar();
 
 #endif //TRABALHO_PPP_AUXILIAR_H
