@@ -9,9 +9,7 @@ int main() {
 
   clean();
 
-  while (1) {
-    menu(&l);
-  }
+  while (menu(&l));
 
 return 0;
 }
