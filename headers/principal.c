@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h> 
 
 void clean() {
     #if defined(_WIN32)
@@ -148,8 +149,59 @@ int carregar_conta(lista *l, int numero, double montante) {
     return 1;
 }
 
+/*
+    ! Pede alunos
+    * Return ponteiro para lista de alunos se tudo correu bem
+    * Return NULL se algum dos dados foi inserido incorretamente
+*/
+ALUNO * pede_aluno() {
+    int erro = 0;
 
-void menu(lista *l){
+    // Pede Nome
+    char nome[100];
+    printf("Nome do aluno: ");
+    scanf("%s", nome); // TODO: Lembrar de segurança
+
+    // Pede Data de Nascimento
+    DATA nascimento;
+    printf("Data nascimento (DD/MM/AAAA): ");
+    scanf("%d/%d/%d", &nascimento.dia, &nascimento.mes, &nascimento.ano);
+
+    // Pede Numero
+    int numero;
+    printf("Número de estudante: ");
+    scanf("%d", &numero);
+
+    // Pede turma
+    TURMA turma;
+    printf("Turma (10-12 1A-9Z): ");
+    scanf("%d %s", &turma.ano, turma.sigla);
+    turma.sigla[1] = toupper(turma.sigla[1]);
+
+
+    // Handle erros
+    erro = verifica_data(&nascimento) || verifica_numero(numero) || verifica_turma(&turma);
+    if (erro) { // erro = 1
+        printf("Algum dos parâmetros não é válido.\n");
+        return NULL;
+    }
+
+    if (!confirmar()) return NULL; // Utilizador não confirmou
+    ALUNO * a = malloc(sizeof(ALUNO));
+    if (a == NULL) {
+        free(a);
+        return NULL;
+    };
+    strcpy(a->nome, nome);
+    a->data_nascismento = nascimento;
+    a->turma = turma;
+    a->numero = numero;
+    a->saldo = 0.00;
+    a->despesas = NULL;
+    return a;
+}
+
+int menu(lista *l){
     int n, numero;
     double saldo;
     opcoes(); // mostra as opções
@@ -157,6 +209,10 @@ void menu(lista *l){
     scanf("%d", &n);
     clean();
     switch (n) {
+        case 0: {
+            printf("Fim do programa\n");
+            return 0;
+        }
         case 1: {
             printf("Intruduzindo um aluno...\n");
             ALUNO * aluno = pede_aluno();
@@ -213,6 +269,7 @@ void menu(lista *l){
         }
         default:
             printf("Opção inválida!\n");
-            return;
+            break;
     }
+    return 1;
 }

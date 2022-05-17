@@ -94,8 +94,17 @@ void listar_alunos_saldo(lista * l, double saldo);
 int carregar_conta(lista *l, int numero, double montante);
 
 /*
-    ! Mostra o menu completo
+    ! Pede alunos
+    * Return ponteiro para lista de alunos se tudo correu bem
+    * Return NULL se algum dos dados foi inserido incorretamente
 */
-void menu(lista *l);
+ALUNO * pede_aluno();
+
+/*
+    ! Mostra o menu completo
+    * Return 1 se o utilizador quiser continuar
+    * Return 0 se o utilizador quiser sair
+*/
+int menu(lista *l);
 
 #endif //TRABALHO_H_PRINCIPAL_H
