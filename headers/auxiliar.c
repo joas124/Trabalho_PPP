@@ -130,12 +130,13 @@ int verifica_numero(int numero) {
     ! Verifica turma
     * Return 1 se for inválida
     * Return 0 se for válida
+    verifica se o 2º caracter é uma letra maiscula entre A e Z
 */
 int verifica_turma(TURMA *t) {
-    const char p[27] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    if (t->ano < 1 || t->ano > 12) return 1;
-    for (int i = 0; i < 27; i++) if (t->sigla[1] == p[i]) return 0;
-    return 1;
+    if (t->ano < 1 || t->ano > 12 ||
+        t->sigla[0] < 49 || t->sigla[0] > 57 ||
+        t->sigla[1] < 65 || t->sigla[1] > 90) return 1;
+    return 0;
 }
 
 /*
