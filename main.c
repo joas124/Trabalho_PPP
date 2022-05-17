@@ -1,5 +1,6 @@
+#include "./headers/principal.h"
+#include "./headers/auxiliar.h"
 #include <stdio.h>
-#include "auxiliar.h"
 #include <stdlib.h>
 
 int main() {
