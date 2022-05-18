@@ -23,7 +23,19 @@ ALUNO * procurar_aluno(lista *l, int numero);
     ! Mostra as despesas de um aluno
     Chama a função de procurar o aluno
 */
+
+int converte_data(DATA *data);
+
 void mostrar_despesas(lista *l, int numero);
+
+/*
+    ! Cria uma despesa para um aluno
+    Chama a função de procurar aluno
+    Se conseguir criar da return a "1"
+    Caso contrário, da return a "0"
+ */
+
+int criar_despeas(lista *l, int numero, double valor, DATA *data);
 
 /* 
     ! Auxiliar para o menu

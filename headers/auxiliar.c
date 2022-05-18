@@ -57,6 +57,17 @@ ALUNO * procurar_aluno(lista *l, int numero) {
     ! Mostra as despesas de um aluno
     Chama a função de procurar o aluno
 */
+
+int converte_data(DATA *data){
+    if (verifica_data(data)) return 0;
+    int d = data->dia;
+    int anosbis = (data->ano % 4) - (data->ano - len(data->ano) + 2);
+    int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    d += (data->mes * meses[data->mes -1]) + (data->ano - anosbis)*365 + anosbis*366;
+    return d;
+}
+
+
 void mostrar_despesas(lista *l, int numero) {
     if (l == NULL) return;
     ALUNO *aluno = procurar_aluno(l, numero);
@@ -67,6 +78,20 @@ void mostrar_despesas(lista *l, int numero) {
                 desp->despesa.data.mes, desp->despesa.data.ano);
         desp = desp->proximo;
     }
+}
+/*
+    ! Cria a despesa para um aluno
+    Chama a função de procurar o aluno
+    Se conseguir criar da return a "1"
+    Caso contrário, da return a "0"
+*/
+int criar_despesas(lista *l, int numero, double valor, DATA data){
+    if (l == NULL) return 0;
+    ALUNO *aluno = procurar_aluno(l, numero);
+    if (aluno == NULL) return 0;
+    NO_DESPESAS *nova_despesa = malloc(sizeof(NO_DESPESAS));
+    if (nova_despesa == NULL) return 0;
+    return 1;
 }
 
 /* 
@@ -149,7 +174,7 @@ int verifica_turma(TURMA *t) {
 */
 int confirmar() {
     char c;
-    printf("Confirmar? (S/N): ");
+    printf("Confirmar? (S/N):");
     scanf(" %c", &c);
     if (toupper(c) == 'S') return 1;
     printf("Operação cancelada\n");

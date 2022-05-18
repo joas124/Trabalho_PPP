@@ -205,7 +205,7 @@ int menu(lista *l){
     int n, numero;
     double saldo;
     opcoes(); // mostra as opções
-    printf("Digite o número correspondente à operação que quer realizar: ");
+    printf("Digite o número correspondente à operação que quer realizar:");
     scanf("%d", &n);
     clean();
     switch (n) {
@@ -217,7 +217,7 @@ int menu(lista *l){
             printf("Intruduzindo um aluno...\n");
             ALUNO * aluno = pede_aluno();
             if (aluno == NULL) {
-                printf("Não foi possível introduzir o aluno.\n");
+                printf("Não foi possível introduzir o aluno\n");
                 break;
             }
             inserir_aluno(l, aluno);
@@ -225,7 +225,7 @@ int menu(lista *l){
             break;
         }
         case 2: {
-            printf("Digite o número do aluno que quer eliminar: ");
+            printf("Digite o número do aluno que quer eliminar:");
             scanf("%d", &numero);
             clean();
             if (eliminar_aluno(l, numero) == 1) printf("O aluno foi eliminado com sucesso\n");
@@ -239,7 +239,7 @@ int menu(lista *l){
         }
         case 4: {
             printf("Listando alunos pelo seu saldo...\n");
-            printf("Digite o saldo máximo: ");
+            printf("Digite o saldo máximo:");
             scanf("%lf", &saldo);
             clean();
             listar_alunos_saldo(l, saldo);
@@ -247,21 +247,25 @@ int menu(lista *l){
         }
         case 5: {
             printf("Listando informação de um aluno...\n");
-            printf("Digite o número do aluno: ");
+            printf("Digite o número do aluno:");
             scanf("%d", &numero);
             clean();
             imprime_aluno(procurar_aluno(l, numero));
             break;
         }
         case 6: {
-            // TODO
+            printf("Efetuando uma despesa de um aluno...\n");
+
             break;
         }
         case 7: {
             printf("Carregando conta de um aluno...\n");
-            printf("Digite o número do aluno: ");
-            scanf("%d", &numero);
-            printf("Digite o valor que queres carregar: ");
+            printf("Digite o número do aluno:");
+            if (procurar_aluno(l,scanf("%d", &numero)) == NULL){
+                printf("Não existe nenhum aluno associado a este número!\n");
+                break;
+            }
+            printf("Digite o valor que queres carregar:");
             scanf("%lf", &saldo);
             carregar_conta(l, numero, saldo);
             clean();
