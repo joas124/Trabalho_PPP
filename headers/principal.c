@@ -247,6 +247,10 @@ int menu(lista *l){
         case 1: { // ! Não mexer mais neste case
             printf("Intruduzindo um aluno...\n");
             ALUNO * aluno = pede_aluno();
+            if (aluno == NULL) {
+                printf("Aluno não introduzido.\n");
+                break;
+            }
             clean();
             if (inserir_aluno(l, aluno)) printf("Aluno inserido com sucesso!\n");
             break;

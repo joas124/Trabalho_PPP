@@ -93,13 +93,14 @@ void mostrar_despesas(lista *l, int numero) {
         desp = desp->proximo;
     }
 }
+
 /*
     ! Cria a despesa para um aluno
     Chama a função de procurar o aluno
     Se conseguir criar da return a "1"
     Caso contrário, da return a "0"
 */
-int criar_despesas(lista *l, int numero, double valor, DATA data){
+int criar_despesas(lista *l, int numero){
     if (l == NULL) return 0;
     ALUNO *aluno = procurar_aluno(l, numero);
     if (aluno == NULL) return 0;
@@ -195,9 +196,11 @@ int verifica_saldo(double saldo) {
     * Return 0 se não confirmar
 */
 int confirmar() {
+    char confirma[10];
+    while (getchar() != '\n');
     printf("Confirmar? (S/N): ");
-    while (getchar() != '\n'); // Apanha o ultimo '\n' para que não interfira o input
-    if (toupper(fgetc(stdin)) == 'S') return 1;
+    fgets(confirma, 10, stdin);
+    if(toupper(confirma[0]) == 'S') return 1;
     printf("Operação cancelada\n");
     return 0;
 }
