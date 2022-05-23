@@ -69,7 +69,6 @@ int inserir_aluno(lista * l, ALUNO *aluno);
     ! Eliminar um aluno
     * Return 1 se eliminou com sucesso
     * Return 0 se não eliminou
-    Usa o número de estudante para procurar pelo aluno
 */
 int eliminar_aluno(lista *l, int numero);
 
@@ -89,7 +88,6 @@ void listar_alunos_saldo(lista * l, double saldo);
     ! Carregar conta de um aluno
     * Return 1 se carregou com sucesso
     * Return 0 se não carregou
-    Chama a função de procurar o aluno
 */
 int carregar_conta(lista *l, int numero, double montante);
 
