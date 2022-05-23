@@ -266,7 +266,7 @@ int menu(lista *l){
         }
         case 4: {
             printf("Listando alunos pelo seu saldo...\n");
-            printf("Digite o saldo máximo: ");
+            printf("Digite o saldo máximo:");
             scanf("%lf", &saldo);
             if (verifica_saldo(saldo)) {
                 clean();
@@ -279,7 +279,7 @@ int menu(lista *l){
         }
         case 5: { // ! Não mexer mais neste case
             printf("Listando informação de um aluno...\n");
-            printf("Digite o número do aluno: ");
+            printf("Digite o número do aluno:");
             scanf("%d", &numero);
             if (procurar_aluno(l, numero) == NULL) {
                 clean();
@@ -291,7 +291,8 @@ int menu(lista *l){
             break;
         }
         case 6: {
-            // TODO
+            printf("Efetuando uma despesa de um aluno...\n");
+
             break;
         }
         case 7: {
