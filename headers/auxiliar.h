@@ -7,6 +7,11 @@
 void imprime_lista(lista *l);
 
 /*
+    ! Imprime nomes dos alunos ordem alfabetica
+*/
+int imprime_nomes(lista *l);
+
+/*
     ! Imprime dados do aluno
 */
 void imprime_aluno(ALUNO *aluno);
@@ -57,10 +62,24 @@ int verifica_numero(int numero);
 int verifica_turma(TURMA *t);
 
 /*
+    ! Verifica saldo
+    * Return 1 se for inválida
+    * Return 0 se for válida
+*/
+int verifica_saldo(double saldo);
+
+/*
     ! Confirmar passo
     * Return 1 se confirmar
     * Return 0 se não confirmar
 */
 int confirmar();
+
+/*
+    ! Verifica input
+    * Return 1 se for válido
+    * Return 0 se for inválido
+*/
+int verifica_input(int input);
 
 #endif //TRABALHO_PPP_AUXILIAR_H

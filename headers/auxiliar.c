@@ -24,6 +24,20 @@ void imprime_lista(lista *l) {
 }
 
 /*
+    ! Imprime nomes dos alunos ordem alfabetica
+    * Return 1 se houver alguem na lista
+    * Return 0 se lista estiver vazia
+*/
+int imprime_nomes(lista *l) {
+    if (l == NULL) return 0;
+    no_lista *aux = l->inicio;
+    if (aux == NULL) return 0;
+    for (; aux != NULL; aux = aux->prox) printf("%s\n", aux->aluno.nome);
+    printf("-----------------------------------------------------\n");
+    return 1;
+}
+
+/*
     ! Imprime dados do aluno
 */
 void imprime_aluno(ALUNO *aluno) {
@@ -95,6 +109,7 @@ int len(int n) {
 
 /*
     ! Verifica data
+    TODO: Trocar os returns
     * Return 1 se for inválida
     * Return 0 se for válida
 */
@@ -122,15 +137,16 @@ int verifica_data(DATA * d) {
     * Return 0 se for válida
 */
 int verifica_numero(int numero) {
-    if (len(numero) != 10) return 1;
-    return 0;
+    return (len(numero) != 10);
+    // if (len(numero) != 10) return 1;
+    // return 0;
 }
 
 /*
     ! Verifica turma
     * Return 1 se for inválida
     * Return 0 se for válida
-    verifica se o 2º caracter é uma letra maiscula entre A e Z
+    Está a usar ASCII
 */
 int verifica_turma(TURMA *t) {
     if (t->ano < 1 || t->ano > 12 ||
@@ -140,18 +156,32 @@ int verifica_turma(TURMA *t) {
 }
 
 /*
-    TODO: PERGUNTAR AO PROFESSOR SE A MELHOR MANEIRA DE LER CARACTER É ASSIM
+    ! Verifica saldo
+    * Return 1 se for válido
+    * Return 0 se for inválido
+*/
+int verifica_saldo(double saldo) {
+    return saldo > 0;
+}
+
+/*
     ! Confirmar passo
     * Return 1 se confirmar
     * Return 0 se não confirmar
-    Só confirma se for 's' ou 'S'
-    Nega todos os outros inputs
 */
 int confirmar() {
-    char c;
     printf("Confirmar? (S/N): ");
-    scanf(" %c", &c);
-    if (toupper(c) == 'S') return 1;
+    while (getchar() != '\n'); // Apanha o ultimo '\n' para que não interfira o input
+    if (toupper(fgetc(stdin)) == 'S') return 1;
     printf("Operação cancelada\n");
     return 0;
+}
+
+/*
+    ! Verifica input
+    * Return 1 se for válido
+    * Return 0 se for inválido
+*/
+int verifica_input(int input) {
+    return (input >= 0 && input <= 7);
 }
