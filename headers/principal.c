@@ -206,7 +206,7 @@ ALUNO * pede_aluno() {
     turma.sigla[1] = toupper(turma.sigla[1]);
 
     // Handle erros
-    erro = verifica_numero(numero) || verifica_turma(&turma);
+    erro = !verifica_numero(numero) || verifica_turma(&turma);
     if (erro) { // erro = 1
         printf("Algum dos parâmetros não é válido.\n");
         return NULL;
@@ -219,17 +219,20 @@ ALUNO * pede_aluno() {
         return NULL;
     };
     strcpy(a->nome, nome);
-    a->data_nascismento = nascimento;
+    a->data_nascimento = nascimento;
     a->turma = turma;
     a->numero = numero;
     a->saldo = 0.00;
-    a->despesas = NULL;
+    a->despesas = malloc(sizeof (NO_DESPESAS));
+    a->despesas->inicio = NULL;
     return a;
 }
 
 int menu(lista *l){
     int input, numero;
-    double saldo;
+    double saldo, despesa;
+    char descricao[100];
+    DATA data;
     opcoes(); // mostra as opções
     printf("Digite o número correspondente à operação que quer realizar: ");
     if (scanf("%d", &input) == 0) { // faz com que dê handle ao infinite loop do input
@@ -272,7 +275,7 @@ int menu(lista *l){
             printf("Listando alunos pelo seu saldo...\n");
             printf("Digite o saldo máximo:");
             scanf("%lf", &saldo);
-            if (verifica_saldo(saldo)) {
+            if (verifica_saldo(saldo) == 0) {
                 clean();
                 printf("Montante inválido\n");
                 break;
@@ -296,10 +299,62 @@ int menu(lista *l){
         }
         case 6: {
             printf("Efetuando uma despesa de um aluno...\n");
-
+            printf("Digite o número do aluno: ");
+            scanf("%d", &numero);
+            if (procurar_aluno(l, numero) == NULL){
+                clean();
+                printf("Número inválido\n");
+                break;
+            }
+            printf("Digite o valor da despesa: ");
+            scanf("%lf", &despesa);
+            if (verifica_saldo(despesa) == 0) {
+                clean();
+                printf("Montante inválido\n");
+                break;
+            }
+            printf("Digite a descrição da despesa: ");
+            scanf("%s", &descricao);
+            printf("%s", descricao);
+            if (strlen(descricao) == 0){
+                clean();
+                printf("Descrição inválida\n");
+                break;
+            }
+            printf("Digite a data de faturação da despesa(DD/MM/AAAA): ");
+            scanf("%d/%d/%d",&data.dia, &data.mes, &data.ano);
+            if (verifica_data(&data) == 0){
+                clean();
+                printf("Data inválida!");
+                break;
+            }
+            if (confirmar() == 0) break;
+            clean();
+            switch (criar_despesas(l, data, numero, despesa, descricao)) {
+                case 0:
+                    printf("Não foi possível criar a despesa\n");
+                    break;
+                case -1:
+                    printf("O aluno não possui saldo suficiente\n");
+                    break;
+                default:
+                    printf("Despesa criada com sucesso\n");
+                    break;
+            };
             break;
         }
-        case 7: {
+        case 7: //TODO Falta implementar uma função que diga se as despesas estão vazias
+            printf("Listando as despesas de um aluno..\n");
+            printf("Digite o número do aluno: ");
+            scanf("%d", &numero);
+            if (verifica_numero(numero) == 0) {
+                clean();
+                printf("Número inválido\n");
+                break;
+            }
+            mostrar_despesas(l,numero);
+            break;
+        case 8: {
             printf("Carregando conta de um aluno...\n");
             printf("Digite o número do aluno: ");
             scanf("%d", &numero);
@@ -312,7 +367,7 @@ int menu(lista *l){
             scanf("%lf", &saldo);
             if (verifica_saldo(saldo) == 0) {
                 clean();
-                printf("Montante não válido\n");
+                printf("Montante inválido\n");
                 break;
             }
             if (confirmar() == 0) break;

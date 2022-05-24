@@ -28,7 +28,7 @@ typedef struct lista_despesas{
 
 typedef struct aluno {
     char nome[101];
-    DATA data_nascismento;
+    DATA data_nascimento;
     TURMA turma;
     int numero; // numero de estudante
     double saldo; // só numeros positivos
@@ -104,4 +104,4 @@ ALUNO * pede_aluno();
 */
 int menu(lista *l);
 
-#endif //TRABALHO_H_PRINCIPAL_H
+#endif //TRABALHO_H_HEADERS_PRINCIPAL_H
