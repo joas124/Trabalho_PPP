@@ -113,7 +113,7 @@ void mostrar_despesas(lista *l, int numero) {
     if (aluno == NULL) return;
     NO_DESPESAS *desp = aluno->despesas->inicio;
     while (desp != NULL) {
-        printf("%s: %lf (%d/%d/%d)\n", desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,
+        printf("%s: %.02lf (%d/%d/%d)\n", desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,
                 desp->despesa.data.mes, desp->despesa.data.ano);
         desp = desp->proximo;
     }

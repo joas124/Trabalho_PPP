@@ -53,6 +53,14 @@ int eliminar_aluno(lista *l, int numero) {
         if (atual->aluno.numero == numero) {
             if (ant == NULL) l->inicio = atual->prox; // no caso de ser o primeiro aluno da lista: o inicio passa a ser o segundo aluno
             else ant->prox = atual->prox;             // nos outros casos: anterior aponta para o proximo
+            NO_DESPESAS *despesas = atual->aluno.despesas->inicio; // Ponteiro para poder apagar as despesas
+            NO_DESPESAS *despesasprox = atual->aluno.despesas->inicio->proximo; // Ponteiro para guardar a prox despesa
+            while (despesasprox != NULL){
+                free(despesas);
+                despesas = despesasprox;
+                despesasprox = despesasprox->proximo;
+            }
+            free(despesasprox);
             free(atual);                              // liberta a memoria do aluno
             return 1;                                 // retorna 1 porque já foi eliminado
         }
@@ -262,6 +270,7 @@ int menu(lista *l){
             printf("Digite o número do aluno que quer eliminar: ");
             scanf("%d", &numero);
             clean();
+            if (confirmar() == 0) break;
             if (eliminar_aluno(l, numero)) printf("O aluno foi eliminado com sucesso\n");
             else printf("Não foi encontrado nenhum aluno com este número\n");
             break;
@@ -315,7 +324,6 @@ int menu(lista *l){
             }
             printf("Digite a descrição da despesa: ");
             scanf("%s", &descricao);
-            printf("%s", descricao);
             if (strlen(descricao) == 0){
                 clean();
                 printf("Descrição inválida\n");
