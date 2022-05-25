@@ -53,6 +53,13 @@ void opcoes();
 int len(int n);
 
 /*
+    ! Verifica nome
+    * Return 1 se inválido
+    * Return 0 se válido
+*/
+int verifica_nome(char *nome);
+
+/*
     ! Verifica Data
     * Return 1 se for válida
     * Return 0 se for inválida

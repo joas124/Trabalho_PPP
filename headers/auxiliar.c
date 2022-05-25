@@ -33,7 +33,6 @@ int imprime_nomes(lista *l) {
     no_lista *aux = l->inicio;
     if (aux == NULL) return 0;
     for (; aux != NULL; aux = aux->prox) printf("%s\n", aux->aluno.nome);
-    printf("-----------------------------------------------------\n");
     return 1;
 }
 
@@ -46,8 +45,7 @@ void imprime_aluno(ALUNO *aluno) {
             aluno->data_nascismento.ano);
     printf("Turma: %dº %s\n", aluno->turma.ano, aluno->turma.sigla);
     printf("Numero: %d\n", aluno->numero);
-    printf("Saldo: %.2f\n", aluno->saldo);
-    printf("\n");
+    printf("Saldo: %.2lf\n", aluno->saldo);
 }
 
 /*
@@ -134,6 +132,22 @@ int len(int n) {
 }
 
 /*
+    ! Verifica nome
+    * Return 1 se inválido
+    * Return 0 se válido
+*/
+int verifica_nome(char *nome) {
+    if (nome == NULL) return 1;
+    int i = 0;
+    for (; nome[i] != '\0'; i++) { // vai até o caracter da string que é '\0'
+        if (toupper((nome[i]) < 'A' || toupper(nome[i]) > 'Z') && nome[i] != ' ') {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/*
     ! Verifica data
     TODO: Trocar os returns
     * Return 1 se for inválida
@@ -164,20 +178,15 @@ int verifica_data(DATA * d) {
 */
 int verifica_numero(int numero) {
     return (len(numero) != 10);
-    // if (len(numero) != 10) return 1;
-    // return 0;
 }
 
 /*
     ! Verifica turma
     * Return 1 se for inválida
     * Return 0 se for válida
-    Está a usar ASCII
 */
 int verifica_turma(TURMA *t) {
-    if (t->ano < 1 || t->ano > 12 ||
-        t->sigla[0] < 49 || t->sigla[0] > 57 ||
-        t->sigla[1] < 65 || t->sigla[1] > 90) return 1;
+    if (t->ano < 1 || t->ano > 12) return 1;
     return 0;
 }
 
@@ -196,10 +205,9 @@ int verifica_saldo(double saldo) {
     * Return 0 se não confirmar
 */
 int confirmar() {
-    char confirma[10];
-    while (getchar() != '\n');
+    char confirma[3];
     printf("Confirmar? (S/N): ");
-    fgets(confirma, 10, stdin);
+    fgets(confirma, 3, stdin);
     if(toupper(confirma[0]) == 'S') return 1;
     printf("Operação cancelada\n");
     return 0;
