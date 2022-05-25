@@ -5,6 +5,9 @@
 #include <string.h>
 #include <ctype.h> 
 
+#define MAX_NOME 100
+#define MAX_TURMA 10
+
 void clean() {
     #if defined(_WIN32)
         // system("cls"); /* Não está disponivel para o CLion (provavelmenta buga) */
@@ -30,7 +33,12 @@ int inicializa_lista(lista *l) {
     * Return 0 se não inseriu
 */
 int inserir_aluno(lista *l, ALUNO *aluno) {
-    if (l == NULL || procurar_aluno(l, aluno->numero) != NULL) return 0; // se não existir nenhum aluno com esse numero
+    if (l == NULL) return 0; // se não existir nenhum aluno com esse numero
+    if (procurar_aluno(l, aluno->numero) != NULL) {
+        printf("Já existe valuno com o número inserido\n");
+        printf("----------------------------------------------------\n");
+        return 0;
+    }
     no_lista *novo = malloc(sizeof(no_lista)); // reserva espaço para o novo aluno
     if (novo == NULL) return 0;                // se não conseguir reservar acaba a função
     novo->aluno = *aluno;                      // novo aluno é o aluno passado por parâmetro
@@ -142,7 +150,10 @@ void listar_alunos_saldo(lista *l, double saldo) {
 int carregar_conta(lista *l, int numero, double montante) {
     if (l == NULL) return 0;
     ALUNO *aluno = procurar_aluno(l, numero);
-    if (aluno == NULL) return 0;
+    if (aluno == NULL) {
+        printf("Aluno não encontrado\n");
+        return 0;
+    }
     unsigned int saldo = (aluno->saldo * 100); // converte o saldo para centimos
     saldo += (montante * 100);                 // adiciona saldo em centimos
     aluno->saldo = saldo / 100.0;              // transforma de centimos para euros again
@@ -153,60 +164,42 @@ int carregar_conta(lista *l, int numero, double montante) {
     ! Pede alunos
     * Return ponteiro para lista de alunos se tudo correu bem
     * Return NULL se algum dos dados foi inserido incorretamente
-    TODO: CORRIGIR BUG QUE ACONTECE QUANDO SE METE TODOS OS INPUTS = 0
 */
 ALUNO * pede_aluno() {
     int erro = 0;
 
     // Pede Nome
-    char nome[100];
+    char nome[MAX_NOME];
     printf("Nome do aluno: ");
     while (getchar() != '\n'); // Apanha o ultimo '\n' para que não interfira o input
-    fgets(nome, 100, stdin);
-    if (strlen(nome) == 0) erro = 1; // TODO ALTERAR!!
-    nome[strlen(nome) - 1] = '\0'; // Remove o '\n' do fim da string
+    fgets(nome, MAX_NOME, stdin);
+    nome[strlen(nome) - 1] = '\0'; // Troca o '\n' do fim da string
 
     // Pede Data de Nascimento
     DATA nascimento;
     printf("Data nascimento (DD/MM/AAAA): ");
     scanf("%d/%d/%d", &nascimento.dia, &nascimento.mes, &nascimento.ano);
-    // TODO: CORRIGIR BUG QUE ACONTENCE AQUI QUANDO SE METE INPUT INVALIDO
-    // char data[11];
-    // do {
-    //     char *word;
-    //     // lê a data no formato DD/MM/AAAA
-    //     // usar strtok
-    //     // Utiliza fgets e strtol para converter a string para um inteiro antes de passar para a estrutura
-    //     fgets(data, 11, stdin);
-    //     data[10] = '\0'; // Remove o '\n' do fim da string lida
-    //     word = strtok(data, "/");
-    //     for (int i = 0; word != NULL; i++) {
-    //         if (i == 0) nascimento.dia = strtol(word, NULL, 10);
-    //         else if (i == 1) nascimento.mes = strtol(word, NULL, 10);
-    //         else if (i == 2) nascimento.ano = strtol(word, NULL, 10);
-    //         word = strtok(data, "/");
-    //     }
-    //     printf("%s\n", data);
-
-    // } while (verifica_data(&nascimento) == 0);
 
     // Pede Numero
-    char str[11];
+    char num[11];
     int numero;
     printf("Número de estudante: ");
     while (getchar() != '\n'); // Apanha o ultimo '\n' para que não interfira o input
-    fgets(str, 11, stdin);
-    numero = (int) strtol(str, NULL, 10);
-    // scanf("%d", &numero);
+    fgets(num, 11, stdin);
+    numero = (int) strtol(num, NULL, 10);
 
     // Pede turma
     TURMA turma;
-    printf("Turma (10-12 1A-9Z): ");
-    scanf("%d %s%*[^\n]", &turma.ano, turma.sigla);
-    turma.sigla[1] = toupper(turma.sigla[1]);
+    char t[MAX_TURMA];
+    while (getchar() != '\n'); // Apanha o ultimo '\n' para que não interfira o input
+    printf("Ano e Turma (10-12): ");
+    fgets(t, MAX_TURMA, stdin);
+    t[strlen(t) - 1] = '\0'; // Troca o '\n' do fim da string
+    turma.ano = (int) strtol(t, NULL, MAX_TURMA);
+    strcpy(turma.sigla, t + 3);
 
     // Handle erros
-    erro = verifica_numero(numero) || verifica_turma(&turma);
+    erro = verifica_nome(nome) || verifica_data(&nascimento) || verifica_numero(numero) || verifica_turma(&turma);
     if (erro) { // erro = 1
         printf("Algum dos parâmetros não é válido.\n");
         return NULL;
@@ -227,7 +220,7 @@ ALUNO * pede_aluno() {
     return a;
 }
 
-int menu(lista *l){
+int menu(lista *l) {
     int input, numero;
     double saldo;
     opcoes(); // mostra as opções
@@ -249,10 +242,12 @@ int menu(lista *l){
             ALUNO * aluno = pede_aluno();
             if (aluno == NULL) {
                 printf("Aluno não introduzido.\n");
+                printf("----------------------------------------------------\n");
                 break;
             }
             clean();
             if (inserir_aluno(l, aluno)) printf("Aluno inserido com sucesso!\n");
+            printf("----------------------------------------------------\n");
             break;
         }
         case 2: {  // ! Não mexer mais neste case
@@ -261,11 +256,13 @@ int menu(lista *l){
             clean();
             if (eliminar_aluno(l, numero)) printf("O aluno foi eliminado com sucesso\n");
             else printf("Não foi encontrado nenhum aluno com este número\n");
+            printf("----------------------------------------------------\n");
             break;
         }
         case 3: { // ! Não mexer mais neste case
             ordena_alfabeticamente(l);
             if (imprime_nomes(l) == 0) printf("Não existem alunos na lista\n");
+            printf("----------------------------------------------------\n");
             break;
         }
         case 4: {
@@ -275,23 +272,27 @@ int menu(lista *l){
             if (verifica_saldo(saldo)) {
                 clean();
                 printf("Montante inválido\n");
+                printf("----------------------------------------------------\n");
                 break;
             }
             clean();
             listar_alunos_saldo(l, saldo);
+            printf("----------------------------------------------------\n");
             break;
         }
         case 5: { // ! Não mexer mais neste case
             printf("Listando informação de um aluno...\n");
-            printf("Digite o número do aluno:");
+            printf("Digite o número do aluno: ");
             scanf("%d", &numero);
             if (procurar_aluno(l, numero) == NULL) {
                 clean();
                 printf("Não foi encontrado nenhum aluno com este número\n");
+                printf("----------------------------------------------------\n");
                 break;
             }
             clean();
             imprime_aluno(procurar_aluno(l, numero));
+            printf("----------------------------------------------------\n");
             break;
         }
         case 6: {
@@ -300,29 +301,34 @@ int menu(lista *l){
             break;
         }
         case 7: {
+            char num[11];
             printf("Carregando conta de um aluno...\n");
+
             printf("Digite o número do aluno: ");
-            scanf("%d", &numero);
-            if (verifica_numero(numero) == 0) {
-                clean();
-                printf("Número inválido\n");
-                break;
-            }
+            while (getchar() != '\n');
+            fgets(num, 11, stdin);
+            numero = (int) strtol(num, NULL, 10);
+
             printf("Digite o valor para carregar: ");
-            scanf("%lf", &saldo);
+            while (getchar() != '\n');
+            fgets(num, 11, stdin);
+            saldo = strtod(num, NULL);
             if (verifica_saldo(saldo) == 0) {
                 clean();
                 printf("Montante não válido\n");
+                printf("----------------------------------------------------\n");
                 break;
             }
             if (confirmar() == 0) break;
             clean(); // Apaga a consola
             if (carregar_conta(l, numero, saldo)) printf("Conta carregada com sucesso\n");
             else printf("Não foi possível carregar a conta\n");
+            printf("----------------------------------------------------\n");
             break;
         }
         default: { // ! Não mexer mais neste case
             printf("Opção inválida!\n");
+            printf("----------------------------------------------------\n");
             break;
         }
     }
