@@ -7,7 +7,7 @@ typedef struct data {
 
 typedef struct turma {
     int ano;       // ex: 1
-    char sigla[3]; // ex: "A1"
+    char sigla[10]; // ex: A1BCD
 } TURMA; // 1º ano de turma A1
 
 typedef struct despesas {
