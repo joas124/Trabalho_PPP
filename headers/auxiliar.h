@@ -24,23 +24,39 @@ void imprime_aluno(ALUNO *aluno);
 */
 ALUNO * procurar_aluno(lista *l, int numero);
 
+
+/*
+    ! Função Auxiliar para converter datas
+    Converte uma data DD/MM/AAAA em dias para
+    poder comparar datas mais facilmente
+    Retorna -1 se não conseguir converter
+    Se conseguir, retorna o número de dias
+    (Dá demasiado trabalho, vou desistir dela só)
+*/
+int converte_data(DATA *data);
+
+/*
+    ! Compara duas datas para ver qual a mais recente
+    Retorna 1 se a principal for mais recente
+    Retorna 0 se a principal for mais antiga
+    Retorna -1 se alguma das datas introduzidas é inválida
+*/
+int compara_data(DATA *dataprincipal, DATA *datacomp);
+
 /*
     ! Mostra as despesas de um aluno
     Chama a função de procurar o aluno
 */
-
-int converte_data(DATA *data);
-
 void mostrar_despesas(lista *l, int numero);
 
 /*
-    ! Cria uma despesa para um aluno
-    Chama a função de procurar aluno
+    ! Cria a despesa para um aluno
+    Chama a função de procurar o aluno
     Se conseguir criar da return a "1"
     Caso contrário, da return a "0"
+    Se o aluno não tiver saldo suficiente, dá return a "-1"
  */
-
-int criar_despeas(lista *l, int numero, double valor, DATA *data);
+int criar_despesas(lista *l, DATA data, int numero, double montante, const char descricao[]);
 
 /* 
     ! Auxiliar para o menu

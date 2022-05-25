@@ -14,7 +14,7 @@ void imprime_lista(lista *l) {
     no_lista *aux = l->inicio;
     while (aux != NULL) { // percorre a lista
         printf("Nome: %s\n", aux->aluno.nome);
-        printf("Data de nascimento: %d/%d/%d\n", aux->aluno.data_nascismento.dia, aux->aluno.data_nascismento.mes, aux->aluno.data_nascismento.ano);
+        printf("Data de nascimento: %d/%d/%d\n", aux->aluno.data_nascimento.dia, aux->aluno.data_nascimento.mes, aux->aluno.data_nascimento.ano);
         printf("Turma: %dº %s\n", aux->aluno.turma.ano, aux->aluno.turma.sigla);
         printf("Numero: %d\n", aux->aluno.numero);
         printf("Saldo: %.2f\n", (aux->aluno.saldo));
@@ -41,8 +41,8 @@ int imprime_nomes(lista *l) {
 */
 void imprime_aluno(ALUNO *aluno) {
     printf("Nome: %s\n", aluno->nome);
-    printf("Data de nascimento: %d/%d/%d\n", aluno->data_nascismento.dia, aluno->data_nascismento.mes,
-            aluno->data_nascismento.ano);
+    printf("Data de nascimento: %d/%d/%d\n", aluno->data_nascimento.dia, aluno->data_nascimento.mes,
+            aluno->data_nascimento.ano);
     printf("Turma: %dº %s\n", aluno->turma.ano, aluno->turma.sigla);
     printf("Numero: %d\n", aluno->numero);
     printf("Saldo: %.2lf\n", aluno->saldo);
@@ -66,19 +66,44 @@ ALUNO * procurar_aluno(lista *l, int numero) {
 }
 
 /*
-    ! Mostra as despesas de um aluno
-    Chama a função de procurar o aluno
+    ! Função Auxiliar para converter datas
+    Converte uma data DD/MM/AAAA em dias para
+    poder comparar datas mais facilmente
+    Retorna -1 se não conseguir converter
+    Se conseguir, retorna o número de dias
+    (Dá demasiado trabalho, vou desistir dela só)
 */
 
 int converte_data(DATA *data){
-    if (verifica_data(data)) return 0;
+    if (verifica_data(data) == 0) return -1;
     int d = data->dia;
     int anosbis = (data->ano % 4) - (data->ano - len(data->ano) + 2);
     int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    d += (data->mes * meses[data->mes -1]) + (data->ano - anosbis)*365 + anosbis*366;
+    d += (data->ano - anosbis)*365 + anosbis*366;
+    for (int i = 0; i < data->mes -2; ++i){
+        d += meses[i];
+        }
     return d;
 }
+/*
+    ! Compara duas datas para ver qual a mais recente
+    Retorna 1 se a principal for mais recente ou caso sejam iguais
+    Retorna 0 se a principal for mais antiga
+    Retorna -1 se alguma das datas introduzidas é inválida
+    (Desisti de ordenar a lista de despessas, apenas ignore)
+*/
+int compara_data(DATA *dataprincipal, DATA *datacomp){
+    if ((verifica_data(dataprincipal) && verifica_data(datacomp)) == 0) return -1;
+    if (datacomp->ano > dataprincipal->ano) return 0;
+    if ((datacomp->ano == dataprincipal->ano) && (datacomp->mes > dataprincipal->mes)) return 0;
+    if ((datacomp->ano == dataprincipal->ano) && (datacomp->mes == dataprincipal->mes) && (datacomp->dia > dataprincipal->dia)) return 0;
+    return 1;
+}
 
+/*
+    ! Mostra as despesas de um aluno
+    Chama a função de procurar o aluno
+*/
 
 void mostrar_despesas(lista *l, int numero) {
     if (l == NULL) return;
@@ -86,7 +111,7 @@ void mostrar_despesas(lista *l, int numero) {
     if (aluno == NULL) return;
     NO_DESPESAS *desp = aluno->despesas->inicio;
     while (desp != NULL) {
-        printf("%s: %lf\n%d/%d/%d\n", desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,
+        printf("%s: %.02lf (%d/%d/%d)\n", desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,
                 desp->despesa.data.mes, desp->despesa.data.ano);
         desp = desp->proximo;
     }
@@ -97,13 +122,22 @@ void mostrar_despesas(lista *l, int numero) {
     Chama a função de procurar o aluno
     Se conseguir criar da return a "1"
     Caso contrário, da return a "0"
+    Se o aluno não tiver saldo suficiente, dá return a "-1"
 */
-int criar_despesas(lista *l, int numero){
+int criar_despesas(lista *l, DATA data, int numero, double montante, const char descricao[]){
     if (l == NULL) return 0;
     ALUNO *aluno = procurar_aluno(l, numero);
-    if (aluno == NULL) return 0;
     NO_DESPESAS *nova_despesa = malloc(sizeof(NO_DESPESAS));
-    if (nova_despesa == NULL) return 0;
+    DESPESAS *despesa = malloc(sizeof (DESPESAS));
+    if ((nova_despesa == NULL) || (aluno == NULL)) return 0; //Verifica se consegui alocar espaço para a despesa e o aluno foi encontrado
+    if (aluno->saldo < montante) return -1; //Retorna caso o aluno não tenha saldo suficiente
+    aluno->saldo -= montante; //Subtrair a despesa do saldo do aluno
+    despesa->valor = montante;
+    despesa->data = data;
+    strcpy(despesa->descricao,descricao);
+    nova_despesa->despesa = *despesa;
+    nova_despesa->proximo = aluno->despesas->inicio;
+    aluno->despesas->inicio = nova_despesa;
     return 1;
 }
 
@@ -117,7 +151,8 @@ void opcoes() {
     printf("4 - Listar os alunos com saldo abaixo de um determinado valor\n");
     printf("5 - Apresentar toda a informação de um aluno\n");
     printf("6 - Efectuar uma despesa para um aluno\n");
-    printf("7 - Carregar a conta de um aluno\n");
+    printf("7 - Listar as despesas de um aluno\n");
+    printf("8 - Carregar a conta de um aluno\n");
     printf("0 - Sair\n");
 }
 
@@ -149,9 +184,8 @@ int verifica_nome(char *nome) {
 
 /*
     ! Verifica data
-    TODO: Trocar os returns
-    * Return 1 se for inválida
-    * Return 0 se for válida
+    * Return 0 se for inválida
+    * Return 1 se for válida
 */
 int verifica_data(DATA * d) {
     // Vê o ano atual
@@ -166,15 +200,15 @@ int verifica_data(DATA * d) {
         (d->mes == 9 && d->dia > 30) || (d->mes == 11 && d->dia > 30) ||
         (d->ano >  ano_atual || d->ano < 1980)) 
     {
-        return  1;
+        return  0;
     }
-    return 0;
+    return 1;
 }
 
 /*
     ! Verifica Numero de estudante
-    * Return 1 se for inválida
-    * Return 0 se for válida
+    * Return 0 se for inválida
+    * Return 1 se for válida
 */
 int verifica_numero(int numero) {
     return (len(numero) != 10);
