@@ -324,7 +324,7 @@ int menu(lista *l) {
                 break;
             }
             printf("Digite a descrição da despesa: ");
-            scanf("%s", &descricao);
+            scanf("%s", descricao);
             if (strlen(descricao) == 0){
                 clean();
                 printf("Descrição inválida\n");
@@ -365,7 +365,7 @@ int menu(lista *l) {
             break;
         case 8: {
             printf("Carregando conta de um aluno...\n");
-
+            char num[11];
             printf("Digite o número do aluno: ");
             while (getchar() != '\n');
             fgets(num, 11, stdin);

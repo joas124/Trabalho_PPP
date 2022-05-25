@@ -184,15 +184,14 @@ int verifica_nome(char *nome) {
 
 /*
     ! Verifica data
-    * Return 0 se for inválida
-    * Return 1 se for válida
+    * Return 1 se for inválida
+    * Return 0 se for válida
 */
 int verifica_data(DATA * d) {
     // Vê o ano atual
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
     int ano_atual = tm.tm_year + 1900;
-
     if (d->dia < 1 || d->dia > 31 || d->mes < 1 || d->mes > 12 ||
         (d->mes == 2 && d->dia > 29) || (d->mes == 2 && d->dia > 28 &&
         d->ano % 4 != 0 && (d->ano % 100 == 0) && d->ano % 400 != 0) ||
@@ -200,15 +199,15 @@ int verifica_data(DATA * d) {
         (d->mes == 9 && d->dia > 30) || (d->mes == 11 && d->dia > 30) ||
         (d->ano >  ano_atual || d->ano < 1980)) 
     {
-        return  0;
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
 /*
     ! Verifica Numero de estudante
-    * Return 0 se for inválida
-    * Return 1 se for válida
+    * Return 1 se for inválida
+    * Return 0 se for válida
 */
 int verifica_numero(int numero) {
     return (len(numero) != 10);
@@ -220,8 +219,7 @@ int verifica_numero(int numero) {
     * Return 0 se for válida
 */
 int verifica_turma(TURMA *t) {
-    if (t->ano < 1 || t->ano > 12) return 1;
-    return 0;
+    return (t->ano < 1 || t->ano > 12);
 }
 
 /*
