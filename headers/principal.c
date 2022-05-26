@@ -17,6 +17,26 @@ void clean() {
 }
 
 /*
+    ! Refaz o ficheiro de alunos
+    * Return 1 se conseguiu
+    * Return 0 se não conseguiu
+*/
+int reescreve_ficheiro(lista *l) {
+    FILE *f = fopen("../alunos.txt", "w");
+    if (f == NULL) return 0;
+    no_lista *aux = l->inicio;
+    while (aux != NULL) {
+        aux->aluno.nome[strlen(aux->aluno.nome)] = '\0'; // Quick fix no ficheiro
+        fprintf(f, "%s| %d/%d/%d | %d | %s | %d | %.2f\n", aux->aluno.nome, aux->aluno.data_nascimento.dia,
+                aux->aluno.data_nascimento.mes, aux->aluno.data_nascimento.ano, aux->aluno.turma.ano,
+                aux->aluno.turma.sigla, aux->aluno.numero, aux->aluno.saldo);
+        aux = aux->prox;
+    }
+    fclose(f);
+    return 1;
+}
+
+/*
     ! Inicializa a lista
     * Return 1 se inicializou com sucesso
     * Return 0 se não conseguiu inicializar
@@ -24,6 +44,34 @@ void clean() {
 int inicializa_lista(lista *l) {
     if (l == NULL) return 0;
     l->inicio = NULL;
+    FILE *file = fopen("../alunos.txt", "r");
+    if (file == NULL) return 0;
+    ALUNO * a = malloc(sizeof(ALUNO));
+    if (a == NULL) {
+        free(a);
+        return 0;
+    };
+
+    char line[MAX_NOME + MAX_TURMA + 100 + 10 + 10 + 10];
+    while (fgets(line, sizeof(line), file) != NULL) {
+        sscanf(line, "%[^|] | %d/%d/%d | %d | %s | %d | %lf", a->nome, &a->data_nascimento.dia, &a->data_nascimento.mes, &a->data_nascimento.ano, &a->turma.ano, a->turma.sigla, &a->numero, &a->saldo);
+        inserir_aluno(l, a, 0);
+    }
+    free(a);
+    fclose(file);
+    return 1;
+}
+
+/*
+    ! Inserir aluno no ficheiro
+    * Return 1 se inseriu com sucesso
+    * Return 0 se não conseguiu inserir
+*/
+int aluno_ficheiro(ALUNO *aluno) {
+    FILE *file = fopen("../alunos.txt", "a+");
+    if (file == NULL) return 0;
+    fprintf(file, "%s | %d/%d/%d | %d | %s | %d | %.2lf\n", aluno->nome, aluno->data_nascimento.dia, aluno->data_nascimento.mes, aluno->data_nascimento.ano, aluno->turma.ano, aluno->turma.sigla, aluno->numero, aluno->saldo);
+    fclose(file);
     return 1;
 }
 
@@ -32,11 +80,10 @@ int inicializa_lista(lista *l) {
     * Return 1 se inseriu com sucesso
     * Return 0 se não inseriu
 */
-int inserir_aluno(lista *l, ALUNO *aluno) {
+int inserir_aluno(lista *l, ALUNO *aluno, int toggler) {
     if (l == NULL) return 0; // se não existir nenhum aluno com esse numero
     if (procurar_aluno(l, aluno->numero) != NULL) {
-        printf("Já existe valuno com o número inserido\n");
-        printf("----------------------------------------------------\n");
+        printf("Já existe um aluno com o número inserido\n");
         return 0;
     }
     no_lista *novo = malloc(sizeof(no_lista)); // reserva espaço para o novo aluno
@@ -44,6 +91,11 @@ int inserir_aluno(lista *l, ALUNO *aluno) {
     novo->aluno = *aluno;                      // novo aluno é o aluno passado por parâmetro
     novo->prox = l->inicio;                    // o aluno asseguir ao novo agora é o inicio da lista
     l->inicio = novo;                          // o inicio é o novo aluno
+
+    // Escrever no final do ficheiro os dados do novo aluno
+    // OBS: não reescreve o ficheiro, apenas adiciona o novo aluno
+    if (toggler == 1) aluno_ficheiro(aluno);
+
     return 1;
 }
 
@@ -52,30 +104,25 @@ int inserir_aluno(lista *l, ALUNO *aluno) {
     * Return 1 se eliminou com sucesso
     * Return 0 se não eliminou
 */
+// apaga o aluno da lista e do ficheiro
 int eliminar_aluno(lista *l, int numero) {
-    if (l == NULL || procurar_aluno(l, numero) == NULL) return 0;
-    no_lista *atual = l->inicio;
-    if (atual == NULL) return 0;
+    if (l == NULL) return 0;
+    FILE *file = fopen("../alunos.txt", "w");
+    if (file == NULL) return 0;
+    no_lista *aux = l->inicio;
     no_lista *ant = NULL;
-    while (atual != NULL) { // percorre a lista toda
-        if (atual->aluno.numero == numero) {
-            if (ant == NULL) l->inicio = atual->prox; // no caso de ser o primeiro aluno da lista: o inicio passa a ser o segundo aluno
-            else ant->prox = atual->prox;             // nos outros casos: anterior aponta para o proximo
-            NO_DESPESAS *despesas = atual->aluno.despesas->inicio; // Ponteiro para poder apagar as despesas
-            NO_DESPESAS *despesasprox = atual->aluno.despesas->inicio->proximo; // Ponteiro para guardar a prox despesa
-            while (despesasprox != NULL){
-                free(despesas);
-                despesas = despesasprox;
-                despesasprox = despesasprox->proximo;
-            }
-            free(despesasprox);
-            free(atual);                              // liberta a memoria do aluno
-            return 1;                                 // retorna 1 porque já foi eliminado
+    while (aux != NULL) {
+        if (aux->aluno.numero == numero) {
+            if (ant == NULL) l->inicio = aux->prox;
+            else ant->prox = aux->prox;
+            free(aux);
+            reescreve_ficheiro(l);
+            return 1;
         }
-        ant = atual;         // atualiza o anterior para o atual
-        atual = atual->prox; // atual agora é o próximo
+        ant = aux;
+        aux = aux->prox;
     }
-    return 0; // não teve successo
+    return 0;
 }
 
 /*
@@ -99,6 +146,7 @@ int ordena_alfabeticamente(lista *l) {
         }
         atual = atual->prox; // continua em frente
     }
+    reescreve_ficheiro(l);
     return 1; // Sucesso
 }
 
@@ -172,9 +220,17 @@ int carregar_conta(lista *l, int numero, double montante) {
     ! Pede alunos
     * Return ponteiro para lista de alunos se tudo correu bem
     * Return NULL se algum dos dados foi inserido incorretamente
+    ? Dados Pedidos:
+        - Nome do aluno
+        - Data de nascimento
+        - Número do aluno
+        - Turma
+    ? Dados que começam a 0:
+        - Saldo
+        - Despesas
 */
 ALUNO * pede_aluno() {
-    int erro = 0;
+    int erro = 0; // quando erro = 1 a função return NULL
 
     // Pede Nome
     char nome[MAX_NOME];
@@ -189,17 +245,13 @@ ALUNO * pede_aluno() {
     scanf("%d/%d/%d", &nascimento.dia, &nascimento.mes, &nascimento.ano);
 
     // Pede Numero
-    char num[11];
-    int numero;
     printf("Número de estudante: ");
-    while (getchar() != '\n'); // Apanha o ultimo '\n' para que não interfira o input
-    fgets(num, 11, stdin);
-    numero = (int) strtol(num, NULL, 10);
+    int numero = pede_numero();
 
     // Pede turma
     TURMA turma;
     char t[MAX_TURMA];
-    while (getchar() != '\n'); // Apanha o ultimo '\n' para que não interfira o input
+    while (getchar() != '\n');
     printf("Ano e Turma (10-12): ");
     fgets(t, MAX_TURMA, stdin);
     t[strlen(t) - 1] = '\0'; // Troca o '\n' do fim da string
@@ -213,20 +265,24 @@ ALUNO * pede_aluno() {
         return NULL;
     }
 
+    // Confirma dados
     if (confirmar() == 0) return NULL; // Utilizador não confirmou
     ALUNO * a = malloc(sizeof(ALUNO));
     if (a == NULL) {
         free(a);
         return NULL;
     };
+
+    // Passa os dados para a struct
     strcpy(a->nome, nome);
     a->data_nascimento = nascimento;
-    a->turma = turma;
     a->numero = numero;
+    a->turma = turma;
     a->saldo = 0.00;
-    a->despesas = malloc(sizeof (NO_DESPESAS));
+    a->despesas = malloc(sizeof(NO_DESPESAS));
     a->despesas->inicio = NULL;
-    return a;
+
+    return a; // Retorna o aluno
 }
 
 int menu(lista *l) {
@@ -244,43 +300,43 @@ int menu(lista *l) {
     clean();
 
     switch (input) {
-        case 0: { // ! Não mexer mais neste case
+        case 0: { // ! Sair do programa
             printf("Fim do programa\n");
             return 0;
         }
-        case 1: { // ! Não mexer mais neste case
+        case 1: { // ! Inserir aluno
             printf("Intruduzindo um aluno...\n");
             ALUNO * aluno = pede_aluno();
             if (aluno == NULL) {
-                printf("Aluno não introduzido.\n");
+                printf("Aluno inválido\n");
                 printf("----------------------------------------------------\n");
                 break;
             }
             clean();
-            if (inserir_aluno(l, aluno)) printf("Aluno inserido com sucesso!\n");
+            if (inserir_aluno(l, aluno, 1)) printf("Aluno inserido com sucesso!\n");
             printf("----------------------------------------------------\n");
             break;
         }
-        case 2: {  // ! Não mexer mais neste case
+        case 2: { // ! Remover aluno
             printf("Digite o número do aluno que quer eliminar: ");
-            scanf("%d", &numero);
-            clean();
+            numero = pede_numero();
             if (confirmar() == 0) break;
+            clean();
             if (eliminar_aluno(l, numero)) printf("O aluno foi eliminado com sucesso\n");
             else printf("Não foi encontrado nenhum aluno com este número\n");
             printf("----------------------------------------------------\n");
             break;
         }
-        case 3: { // ! Não mexer mais neste case
+        case 3: { // ! Ordenar alunos e imprimir apenas os nomes
             ordena_alfabeticamente(l);
             if (imprime_nomes(l) == 0) printf("Não existem alunos na lista\n");
             printf("----------------------------------------------------\n");
             break;
         }
-        case 4: {
+        case 4: { // ! Imprimir alunos com saldo inferior a um determinado valor «« AINDA NÃO ACABADO
             printf("Listando alunos pelo seu saldo...\n");
             printf("Digite o saldo máximo:");
-            scanf("%lf", &saldo);
+            saldo = pede_montante();
             if (verifica_saldo(saldo) == 0) {
                 clean();
                 printf("Montante inválido\n");
@@ -292,10 +348,10 @@ int menu(lista *l) {
             printf("----------------------------------------------------\n");
             break;
         }
-        case 5: { // ! Não mexer mais neste case
+        case 5: {
             printf("Listando informação de um aluno...\n");
             printf("Digite o número do aluno: ");
-            scanf("%d", &numero);
+            numero = pede_numero();
             if (procurar_aluno(l, numero) == NULL) {
                 clean();
                 printf("Não foi encontrado nenhum aluno com este número\n");
@@ -310,7 +366,7 @@ int menu(lista *l) {
         case 6: {
             printf("Efetuando uma despesa de um aluno...\n");
             printf("Digite o número do aluno: ");
-            scanf("%d", &numero);
+            numero = pede_numero();
             if (procurar_aluno(l, numero) == NULL){
                 clean();
                 printf("Número inválido\n");
@@ -355,7 +411,7 @@ int menu(lista *l) {
         case 7: //TODO Falta implementar uma função que diga se as despesas estão vazias
             printf("Listando as despesas de um aluno..\n");
             printf("Digite o número do aluno: ");
-            scanf("%d", &numero);
+            numero = pede_numero();
             if (verifica_numero(numero) == 0) {
                 clean();
                 printf("Número inválido\n");
@@ -363,18 +419,13 @@ int menu(lista *l) {
             }
             mostrar_despesas(l,numero);
             break;
-        case 8: {
+        case 8: { // ! Carregar conta de um aluno
             printf("Carregando conta de um aluno...\n");
-            char num[11];
             printf("Digite o número do aluno: ");
-            while (getchar() != '\n');
-            fgets(num, 11, stdin);
-            numero = (int) strtol(num, NULL, 10);
+            numero = pede_numero();
 
             printf("Digite o valor para carregar: ");
-            while (getchar() != '\n');
-            fgets(num, 11, stdin);
-            saldo = strtod(num, NULL);
+            saldo = pede_montante();
             if (verifica_saldo(saldo) == 0) {
                 clean();
                 printf("Montante não válido\n");
@@ -382,8 +433,11 @@ int menu(lista *l) {
                 break;
             }
             if (confirmar() == 0) break;
-            clean(); // Apaga a consola
-            if (carregar_conta(l, numero, saldo)) printf("Conta carregada com sucesso\n");
+            clean();
+            if (carregar_conta(l, numero, saldo)) {
+                printf("Conta carregada com sucesso\n");
+                reescreve_ficheiro(l);
+            }
             else printf("Não foi possível carregar a conta\n");
             printf("----------------------------------------------------\n");
             break;

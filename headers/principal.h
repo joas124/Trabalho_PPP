@@ -50,6 +50,13 @@ typedef struct lista {
 void clean();
 
 /*
+    ! Refaz o ficheiro de alunos
+    * Return 1 se conseguiu
+    * Return 0 se não conseguiu
+*/
+int reescreve_ficheiro(lista *l);
+
+/*
     ! Inicializa a lista
     * Return 1 se inicializou com sucesso
     * Return 0 se não conseguiu inicializar
@@ -57,11 +64,18 @@ void clean();
 int inicializa_lista(lista *l);
 
 /*
+    ! Inserir aluno no ficheiro
+    * Return 1 se inseriu com sucesso
+    * Return 0 se não conseguiu inserir
+*/
+int aluno_ficheiro(ALUNO *aluno);
+
+/*
     ! Inserir um novo aluno
     * Return 1 se inseriu com sucesso
     * Return 0 se não inseriu
 */
-int inserir_aluno(lista * l, ALUNO *aluno);
+int inserir_aluno(lista * l, ALUNO *aluno, int toggler);
 
 
 /*
