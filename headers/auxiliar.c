@@ -210,7 +210,7 @@ int verifica_data(DATA * d) {
     * Return 0 se for válida
 */
 int verifica_numero(int numero) {
-    return (len(numero) != 10);
+    return (numero < 0) || (len(numero) != 10); 
 }
 
 /*
@@ -239,6 +239,7 @@ int verifica_saldo(double saldo) {
 int confirmar() {
     char confirma[3];
     printf("Confirmar? (S/N): ");
+    // while (getchar() != '\n');
     fgets(confirma, 3, stdin);
     if(toupper(confirma[0]) == 'S') return 1;
     printf("Operação cancelada\n");
@@ -252,4 +253,26 @@ int confirmar() {
 */
 int verifica_input(int input) {
     return (input >= 0 && input <= 7);
+}
+
+/*
+    ! Pede numero
+    * Return numero
+*/
+int pede_numero() {
+    char num[11];
+    while (getchar() != '\n'); // Apanha o ultimo '\n' para que não interfira o input
+    fgets(num, 11, stdin);
+    return (int) strtol(num, NULL, 10);
+}
+
+/*
+    ! Pede montante
+    * Return montante
+*/
+double pede_montante() {
+    char num[11];
+    while (getchar() != '\n'); // Apanha o ultimo '\n' para que não interfira o input
+    fgets(num, 11, stdin);
+    return strtod(num, NULL);
 }

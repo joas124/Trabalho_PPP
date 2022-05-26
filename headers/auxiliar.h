@@ -117,4 +117,16 @@ int confirmar();
 */
 int verifica_input(int input);
 
+/*
+    ! Pede numero
+    * Return numero
+*/
+int pede_numero();
+
+/*
+    ! Pede montante
+    * Return montante
+*/
+double pede_montante();
+
 #endif //TRABALHO_PPP_AUXILIAR_H
