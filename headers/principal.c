@@ -115,6 +115,13 @@ int eliminar_aluno(lista *l, int numero) {
         if (aux->aluno.numero == numero) {
             if (ant == NULL) l->inicio = aux->prox;
             else ant->prox = aux->prox;
+            NO_DESPESAS *despant = aux->aluno.despesas->inicio;
+            NO_DESPESAS *despaux = aux->aluno.despesas->inicio->proximo;
+            while(despaux != NULL){
+                free(despant);
+                despant = despaux;
+                despaux = despaux->proximo;
+            }
             free(aux);
             reescreve_ficheiro(l);
             return 1;
@@ -388,7 +395,7 @@ int menu(lista *l) {
             }
             printf("Digite a data de faturação da despesa(DD/MM/AAAA): ");
             scanf("%d/%d/%d",&data.dia, &data.mes, &data.ano);
-            if (verifica_data(&data) == 0){
+            if (verifica_data(&data) == 1){
                 clean();
                 printf("Data inválida!");
                 break;
