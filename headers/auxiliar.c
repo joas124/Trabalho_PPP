@@ -116,6 +116,20 @@ void mostrar_despesas(lista *l, int numero) {
         desp = desp->proximo;
     }
 }
+/*
+    ! Inicializa as depesas de um aluno
+    Retorna 1 caso consiga inicializar
+    Retorna 0 caso contrário
+    (Criado para resolver um bug que acontecia
+    caso o aluno não possuísse despesas ao ser
+    lido do ficheiro)
+ */
+int inicializa_despesa(ALUNO *a){
+    a->despesas = malloc(sizeof (LISTA_DESPESAS));
+    if (a->despesas == NULL) return 0;
+    a->despesas->inicio = NULL;
+    return 1;
+}
 
 /*
     ! Cria a despesa para um aluno
@@ -138,6 +152,7 @@ int criar_despesas(lista *l, DATA data, int numero, double montante, const char 
     nova_despesa->despesa = *despesa;
     nova_despesa->proximo = aluno->despesas->inicio;
     aluno->despesas->inicio = nova_despesa;
+    ++aluno->ndespesas;
     return 1;
 }
 

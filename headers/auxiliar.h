@@ -50,6 +50,17 @@ int compara_data(DATA *dataprincipal, DATA *datacomp);
 void mostrar_despesas(lista *l, int numero);
 
 /*
+    ! Inicializa as depesas de um aluno
+    Retorna 1 caso consiga inicializar
+    Retorna 0 caso contrário
+    (Criado para resolver um bug que acontecia
+    caso o aluno não possuísse despesas ao ser
+    lido do ficheiro)
+ */
+
+int inicializa_despesa(ALUNO *a);
+
+/*
     ! Cria a despesa para um aluno
     Chama a função de procurar o aluno
     Se conseguir criar da return a "1"
