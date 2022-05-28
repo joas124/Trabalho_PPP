@@ -23,26 +23,22 @@ void clean() {
 */
 int reescreve_ficheiro(lista *l) {
     FILE *f = fopen("../alunos.txt", "w");
-    FILE *d = fopen("../despesas.txt", "w");
-    if (f == NULL || d == NULL) return 0;
+    if (f == NULL) return 0;
     no_lista *aux = l->inicio;
     while (aux != NULL) {
         aux->aluno.nome[strlen(aux->aluno.nome)] = '\0'; // Quick fix no ficheiro
         fprintf(f, "%s | %d/%d/%d | %d | %s | %d | %.2f | %d\n", aux->aluno.nome, aux->aluno.data_nascimento.dia,
                 aux->aluno.data_nascimento.mes, aux->aluno.data_nascimento.ano, aux->aluno.turma.ano,
                 aux->aluno.turma.sigla, aux->aluno.numero, aux->aluno.saldo, aux->aluno.ndespesas);
-        fprintf(d, "%d:\n",aux->aluno.numero);
-        NO_DESPESAS *auxd = aux->aluno.despesas->inicio;
-        while(auxd != NULL){
-            fprintf(d,"%s | %.02lf | %d/%d/%d\n",auxd->despesa.descricao,auxd->despesa.valor,
-                    auxd->despesa.data.dia,auxd->despesa.data.mes,auxd->despesa.data.ano);
-            auxd = auxd->proximo;
+        NO_DESPESAS *aux_d = aux->aluno.despesas->inicio;
+        while(aux_d != NULL){
+            fprintf(f, "%s: %.02lf | %d/%d/%d\n", aux_d->despesa.descricao, aux_d->despesa.valor,
+                    aux_d->despesa.data.dia, aux_d->despesa.data.mes, aux_d->despesa.data.ano);
+            aux_d = aux_d->proximo;
         }
-        fprintf(d,"\n");
         aux = aux->prox;
     }
     fclose(f);
-    fclose(d);
     return 1;
 }
 
@@ -55,45 +51,34 @@ int inicializa_lista(lista *l) {
     if (l == NULL) return 0;
     l->inicio = NULL;
     FILE *file = fopen("../alunos.txt", "r");
-    FILE *desp = fopen("../despesas.txt", "r");
-    if (file == NULL || desp == NULL) return 0;
+    if (file == NULL) return 0;
     ALUNO * a = malloc(sizeof(ALUNO));
-    LISTA_DESPESAS *d = malloc(sizeof (LISTA_DESPESAS ));
-    d->inicio = NULL;
-    NO_DESPESAS *daux = malloc(sizeof (NO_DESPESAS));
-    NO_DESPESAS *dauxprox;
+    LISTA_DESPESAS *d = malloc(sizeof(LISTA_DESPESAS));
     if (a == NULL || d == NULL) {
         free(a);
         free(d);
         return 0;
     }
     char line_aluno[MAX_NOME + MAX_TURMA + 100 + 10 + 10 + 10];
-    char line_desp[MAX_TURMA + MAX_NOME + 10 + 10 + 10 + 10];
     while (fgets(line_aluno, sizeof(line_aluno), file) != NULL) {
-        sscanf(line_aluno, "%[^|] | %d/%d/%d | %d | %s | %d | %lf | %d", a->nome, &a->data_nascimento.dia, &a->data_nascimento.mes, &a->data_nascimento.ano, &a->turma.ano, a->turma.sigla, &a->numero, &a->saldo, &a->ndespesas);
-        char numero[12];
-        sprintf(numero, "%d", a->numero);
-        strcat(numero, ":\n");
-        while(fgets(line_desp, sizeof (line_desp), desp) != NULL){
-            if (strcmp(numero, line_desp) == 0){
-                for (int i = 0; i < a->ndespesas; ++i){
-                    if (fgets(line_desp, sizeof (line_desp), desp) != NULL){
-                        DESPESAS *despesa = malloc(sizeof (despesa));
-                        sscanf(line_desp, "%s | %d | %d/%d/%d\n",despesa->descricao,despesa->valor,
-                               despesa->data.dia,despesa->data.mes,despesa->data.ano);
-                        daux->despesa = *despesa;
-                        dauxprox = d->inicio->proximo;
-                        d->inicio = daux;
-                        daux->proximo = dauxprox;
-                    }
-                }
-            }
+        sscanf(line_aluno, "%[^|] | %d/%d/%d | %d | %s | %d | %lf | %d:", a->nome, &a->data_nascimento.dia, &a->data_nascimento.mes, &a->data_nascimento.ano, &a->turma.ano, a->turma.sigla, &a->numero, &a->saldo, &a->ndespesas);
+        d->inicio = NULL;
+        for (int i = 0; i < a->ndespesas; ++i){
+            fgets(line_aluno, sizeof(line_aluno), file);
+            NO_DESPESAS *no = malloc(sizeof (NO_DESPESAS));
+            DESPESAS *despesa = malloc(sizeof (NO_DESPESAS));
+            if (no == NULL || despesa == NULL) return 0;
+            sscanf(line_aluno, "%[^:]: %lf | %d/%d/%d", &despesa->descricao, &despesa->valor, &despesa->data.dia, &despesa->data.mes, &despesa->data.ano);
+            printf(line_aluno, "%[^:]: %lf | %d/%d/%d", despesa->descricao, despesa->valor, despesa->data.dia, despesa->data.mes, despesa->data.ano);
+            no->despesa = *despesa;
+            no->proximo = d->inicio;
+            d->inicio = no;
         }
-        inserir_aluno(l,a,d,0);
+        a->despesas = d;
+        inserir_aluno(l, a, 0);
     }
     free(a);
     fclose(file);
-    fclose(desp);
     return 1;
 }
 
@@ -104,18 +89,15 @@ int inicializa_lista(lista *l) {
 */
 int aluno_ficheiro(ALUNO *aluno) {
     FILE *file = fopen("../alunos.txt", "a+");
-    FILE *desp = fopen("../despesas.txt", "a+");
-    if (file == NULL || desp == NULL) return 0;
+    if (file == NULL) return 0;
     fprintf(file, "%s | %d/%d/%d | %d | %s | %d | %.2lf | %d\n", aluno->nome, aluno->data_nascimento.dia, aluno->data_nascimento.mes, aluno->data_nascimento.ano, aluno->turma.ano, aluno->turma.sigla, aluno->numero, aluno->saldo, aluno->ndespesas);
     NO_DESPESAS *aux = aluno->despesas->inicio;
-    fprintf(desp, "%d:",aluno->numero);
     while (aux != NULL){
-        fprintf(desp, "|%s:%d (%d/%d/%d)|", aux->despesa.descricao,aux->despesa.valor,
+        fprintf(file, "%s: %d | %d/%d/%d", aux->despesa.descricao,aux->despesa.valor,
                 aux->despesa.data.dia,aux->despesa.data.mes,aux->despesa.data.ano);
         aux = aux->proximo;
     }
     fclose(file);
-    fclose(desp);
     return 1;
 }
 
@@ -124,7 +106,7 @@ int aluno_ficheiro(ALUNO *aluno) {
     * Return 1 se inseriu com sucesso
     * Return 0 se não inseriu
 */
-int inserir_aluno(lista *l, ALUNO *aluno, LISTA_DESPESAS *despesas, int toggler) {
+int inserir_aluno(lista *l, ALUNO *aluno, int toggler) {
     if (l == NULL) return 0; // se não existir nenhum aluno com esse numero
     if (procurar_aluno(l, aluno->numero) != NULL) {
         printf("Já existe um aluno com o número inserido\n");
@@ -132,8 +114,6 @@ int inserir_aluno(lista *l, ALUNO *aluno, LISTA_DESPESAS *despesas, int toggler)
     }
     no_lista *novo = malloc(sizeof(no_lista)); // reserva espaço para o novo aluno
     if (novo == NULL) return 0;                // se não conseguir reservar acaba a função
-    if (despesas == NULL) inicializa_despesa(aluno);
-    else novo->aluno.despesas->inicio = despesas->inicio;
     novo->aluno = *aluno;                      // novo aluno é o aluno passado por parâmetro
     novo->prox = l->inicio;                    // o aluno asseguir ao novo agora é o inicio da lista
     l->inicio = novo;                          // o inicio é o novo aluno
@@ -301,7 +281,7 @@ ALUNO * pede_aluno() {
     printf("Número de estudante: ");
     int numero = pede_numero();
 
-    // Pede turma
+    // Pede turma TODO Turma não fica sempre maiúscula
     TURMA turma;
     char t[MAX_TURMA];
     while (getchar() != '\n');
@@ -366,7 +346,7 @@ int menu(lista *l) {
                 break;
             }
             clean();
-            if (inserir_aluno(l, aluno, NULL, 1)) printf("Aluno inserido com sucesso!\n");
+            if (inserir_aluno(l, aluno, 1)) printf("Aluno inserido com sucesso!\n");
             printf("----------------------------------------------------\n");
             reescreve_ficheiro(l);
             break;

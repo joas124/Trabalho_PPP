@@ -76,7 +76,7 @@ int aluno_ficheiro(ALUNO *aluno);
     * Return 1 se inseriu com sucesso
     * Return 0 se não inseriu
 */
-int inserir_aluno(lista * l, ALUNO *aluno,LISTA_DESPESAS *despesas, int toggler);
+int inserir_aluno(lista * l, ALUNO *aluno, int toggler);
 
 
 /*
