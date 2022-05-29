@@ -32,7 +32,7 @@ typedef struct aluno {
     TURMA turma;
     int numero; // numero de estudante
     double saldo; // só numeros positivos
-    int ndespesas; // Dá puta jeito guardar o número de despesas de um aluno
+    int num_despesas; // Dá puta jeito guardar o número de despesas de um aluno
     LISTA_DESPESAS *despesas; // antes era um pointer para uma só despesa, agora é para a lista ligada de despesas
 } ALUNO;
 
@@ -69,7 +69,7 @@ int inicializa_lista(lista *l);
     * Return 1 se inseriu com sucesso
     * Return 0 se não conseguiu inserir
 */
-int aluno_ficheiro(ALUNO *aluno);
+int inserir_aluno_ficheiro(ALUNO *aluno);
 
 /*
     ! Inserir um novo aluno
