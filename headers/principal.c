@@ -26,15 +26,11 @@ int reescreve_ficheiro(lista *l) {
     if (f == NULL) return 0;
     no_lista *aux = l->inicio;
     while (aux != NULL) {
-        aux->aluno.nome[strlen(aux->aluno.nome)] = '\0'; // Quick fix no ficheiro
-        fprintf(f, "%s | %d/%d/%d | %d | %s | %d | %.2f | %d\n", aux->aluno.nome, aux->aluno.data_nascimento.dia,
-                aux->aluno.data_nascimento.mes, aux->aluno.data_nascimento.ano, aux->aluno.turma.ano,
-                aux->aluno.turma.sigla, aux->aluno.numero, aux->aluno.saldo, aux->aluno.ndespesas);
-        NO_DESPESAS *aux_d = aux->aluno.despesas->inicio;
-        while(aux_d != NULL){
-            fprintf(f, "%s: %.02lf | %d/%d/%d\n", aux_d->despesa.descricao, aux_d->despesa.valor,
-                    aux_d->despesa.data.dia, aux_d->despesa.data.mes, aux_d->despesa.data.ano);
-            aux_d = aux_d->proximo;
+        fprintf(f, "%s | %d/%d/%d | %d | %s | %d | %.2f | %d\n", aux->aluno.nome, aux->aluno.data_nascimento.dia, aux->aluno.data_nascimento.mes, aux->aluno.data_nascimento.ano, aux->aluno.turma.ano, aux->aluno.turma.sigla, aux->aluno.numero, aux->aluno.saldo, aux->aluno.num_despesas);
+        NO_DESPESAS *no_aux = aux->aluno.despesas->inicio;
+        while (no_aux != NULL) {
+            fprintf(f, "%s: %.2f | %d/%d/%d\n", no_aux->despesa.descricao, no_aux->despesa.valor, no_aux->despesa.data.dia, no_aux->despesa.data.mes, no_aux->despesa.data.ano);
+            no_aux = no_aux->proximo;
         }
         aux = aux->prox;
     }
@@ -46,30 +42,28 @@ int reescreve_ficheiro(lista *l) {
     ! Inicializa a lista
     * Return 1 se inicializou com sucesso
     * Return 0 se não conseguiu inicializar
+    nome | dia/mes/ano | ano | sigla | numero | saldo | num_despesas
+    despesa: valor | dia/mes/ano
 */
 int inicializa_lista(lista *l) {
     if (l == NULL) return 0;
     l->inicio = NULL;
-    FILE *file = fopen("../alunos.txt", "r");
-    if (file == NULL) return 0;
+    FILE *f = fopen("../alunos.txt", "r");
+    if (f == NULL) return 0;
     ALUNO * a = malloc(sizeof(ALUNO));
-    LISTA_DESPESAS *d = malloc(sizeof(LISTA_DESPESAS));
-    if (a == NULL || d == NULL) {
-        free(a);
-        free(d);
-        return 0;
-    }
+    if (a == NULL) return 0;
     char line_aluno[MAX_NOME + MAX_TURMA + 100 + 10 + 10 + 10];
-    while (fgets(line_aluno, sizeof(line_aluno), file) != NULL) {
-        sscanf(line_aluno, "%[^|] | %d/%d/%d | %d | %s | %d | %lf | %d:", a->nome, &a->data_nascimento.dia, &a->data_nascimento.mes, &a->data_nascimento.ano, &a->turma.ano, a->turma.sigla, &a->numero, &a->saldo, &a->ndespesas);
+    while (fgets(line_aluno, sizeof(line_aluno), f) != NULL) {
+        sscanf(line_aluno, "%[^|]| %d/%d/%d | %d | %s | %d | %lf | %d:", a->nome, &a->data_nascimento.dia, &a->data_nascimento.mes, &a->data_nascimento.ano, &a->turma.ano, a->turma.sigla, &a->numero, &a->saldo, &a->num_despesas);
+        a->nome[strlen(a->nome) - 1] = '\0';
+        LISTA_DESPESAS *d = malloc(sizeof(LISTA_DESPESAS));
         d->inicio = NULL;
-        for (int i = 0; i < a->ndespesas; ++i){
-            fgets(line_aluno, sizeof(line_aluno), file);
+        for (int i = 0; i < a->num_despesas; ++i){
+            fgets(line_aluno, sizeof(line_aluno), f);
             NO_DESPESAS *no = malloc(sizeof (NO_DESPESAS));
             DESPESAS *despesa = malloc(sizeof (NO_DESPESAS));
             if (no == NULL || despesa == NULL) return 0;
-            sscanf(line_aluno, "%[^:]: %lf | %d/%d/%d", &despesa->descricao, &despesa->valor, &despesa->data.dia, &despesa->data.mes, &despesa->data.ano);
-            printf(line_aluno, "%[^:]: %lf | %d/%d/%d", despesa->descricao, despesa->valor, despesa->data.dia, despesa->data.mes, despesa->data.ano);
+            sscanf(line_aluno, "%[^:]: %lf | %d/%d/%d", despesa->descricao, &despesa->valor, &despesa->data.dia, &despesa->data.mes, &despesa->data.ano);
             no->despesa = *despesa;
             no->proximo = d->inicio;
             d->inicio = no;
@@ -77,8 +71,7 @@ int inicializa_lista(lista *l) {
         a->despesas = d;
         inserir_aluno(l, a, 0);
     }
-    free(a);
-    fclose(file);
+    fclose(f);
     return 1;
 }
 
@@ -87,17 +80,11 @@ int inicializa_lista(lista *l) {
     * Return 1 se inseriu com sucesso
     * Return 0 se não conseguiu inserir
 */
-int aluno_ficheiro(ALUNO *aluno) {
-    FILE *file = fopen("../alunos.txt", "a+");
-    if (file == NULL) return 0;
-    fprintf(file, "%s | %d/%d/%d | %d | %s | %d | %.2lf | %d\n", aluno->nome, aluno->data_nascimento.dia, aluno->data_nascimento.mes, aluno->data_nascimento.ano, aluno->turma.ano, aluno->turma.sigla, aluno->numero, aluno->saldo, aluno->ndespesas);
-    NO_DESPESAS *aux = aluno->despesas->inicio;
-    while (aux != NULL){
-        fprintf(file, "%s: %d | %d/%d/%d", aux->despesa.descricao,aux->despesa.valor,
-                aux->despesa.data.dia,aux->despesa.data.mes,aux->despesa.data.ano);
-        aux = aux->proximo;
-    }
-    fclose(file);
+int inserir_aluno_ficheiro(ALUNO *aluno) {
+    FILE *f = fopen("../alunos.txt", "a");
+    if (f == NULL) return 0;
+    fprintf(f, "%s | %d/%d/%d | %d | %s | %d | %.2lf | %d\n", aluno->nome, aluno->data_nascimento.dia, aluno->data_nascimento.mes, aluno->data_nascimento.ano, aluno->turma.ano, aluno->turma.sigla, aluno->numero, aluno->saldo, aluno->num_despesas);
+    fclose(f);
     return 1;
 }
 
@@ -118,9 +105,7 @@ int inserir_aluno(lista *l, ALUNO *aluno, int toggler) {
     novo->prox = l->inicio;                    // o aluno asseguir ao novo agora é o inicio da lista
     l->inicio = novo;                          // o inicio é o novo aluno
 
-    // Escrever no final do ficheiro os dados do novo aluno
-    // OBS: não reescreve o ficheiro, apenas adiciona o novo aluno
-    if (toggler == 1) aluno_ficheiro(aluno);
+    if (toggler == 1) inserir_aluno_ficheiro(aluno);
 
     return 1;
 }
@@ -180,6 +165,7 @@ int ordena_alfabeticamente(lista *l) {
         }
         atual = atual->prox; // continua em frente
     }
+    reescreve_ficheiro(l);
     return 1; // Sucesso
 }
 
@@ -227,7 +213,7 @@ void listar_alunos_saldo(lista *l, double saldo) {
         }
         atual = atual->prox;
     }
-    imprime_lista(novalista);
+    if (imprime_nome_numero(l) == 0) printf("Não existem alunos na lista\n");
 }
 
 /*
@@ -258,7 +244,7 @@ int carregar_conta(lista *l, int numero, double montante) {
         - Data de nascimento
         - Número do aluno
         - Turma
-    ? Dados que começam a 0:
+    ? Dados que começam a 0 ou NULL:
         - Saldo
         - Despesas
 */
@@ -312,7 +298,7 @@ ALUNO * pede_aluno() {
     a->numero = numero;
     a->turma = turma;
     a->saldo = 0.00;
-    a->ndespesas = 0;
+    a->num_despesas = 0;
     inicializa_despesa(a);
 
     return a; // Retorna o aluno
@@ -348,7 +334,6 @@ int menu(lista *l) {
             clean();
             if (inserir_aluno(l, aluno, 1)) printf("Aluno inserido com sucesso!\n");
             printf("----------------------------------------------------\n");
-            reescreve_ficheiro(l);
             break;
         }
         case 2: { // ! Remover aluno
@@ -369,9 +354,9 @@ int menu(lista *l) {
             printf("----------------------------------------------------\n");
             break;
         }
-        case 4: { // ! Imprimir alunos com saldo inferior a um determinado valor «« AINDA NÃO ACABADO
+        case 4: { // ! Imprimir alunos com saldo inferior a um determinado valor
             printf("Listando alunos pelo seu saldo...\n");
-            printf("Digite o saldo máximo:");
+            printf("Digite o saldo máximo: ");
             saldo = pede_montante();
             if (verifica_saldo(saldo) == 0) {
                 clean();
@@ -384,11 +369,11 @@ int menu(lista *l) {
             printf("----------------------------------------------------\n");
             break;
         }
-        case 5: {
+        case 5: { // ! Listar a informação sobre o aluno
             printf("Listando informação de um aluno...\n");
             printf("Digite o número do aluno: ");
             numero = pede_numero();
-            if (procurar_aluno(l, numero) == NULL) {
+            if (verifica_numero(numero) || procurar_aluno(l, numero) == NULL) {
                 clean();
                 printf("Não foi encontrado nenhum aluno com este número\n");
                 printf("----------------------------------------------------\n");
@@ -403,36 +388,45 @@ int menu(lista *l) {
             printf("Efetuando uma despesa de um aluno...\n");
             printf("Digite o número do aluno: ");
             numero = pede_numero();
-            if (procurar_aluno(l, numero) == NULL){
+            if (procurar_aluno(l, numero) == NULL) {
                 clean();
-                printf("Número inválido\n");
+                printf("Não foi encontrado nenhum aluno com este número\n");
+                printf("----------------------------------------------------\n");
                 break;
             }
+
             printf("Digite o valor da despesa: ");
-            scanf("%lf", &despesa);
+            despesa = pede_montante();
             if (verifica_saldo(despesa) == 0) {
                 clean();
                 printf("Montante inválido\n");
+                printf("----------------------------------------------------\n");
                 break;
             }
+
             printf("Digite a descrição da despesa: ");
-            scanf("%s", descricao);
-            if (strlen(descricao) == 0){
+            fgets(descricao, 100, stdin);
+            if (strlen(descricao) == 0) {
                 clean();
                 printf("Descrição inválida\n");
+                printf("----------------------------------------------------\n");
                 break;
             }
+            descricao[strlen(descricao) - 1] = '\0'; // Troca o '\n' do fim da string
+
             printf("Digite a data de faturação da despesa(DD/MM/AAAA): ");
-            scanf("%d/%d/%d",&data.dia, &data.mes, &data.ano);
+            scanf("%d/%d/%d", &data.dia, &data.mes, &data.ano);
             while (getchar() != '\n');
-            if (verifica_data(&data) == 1){
+            if (verifica_data(&data)) {
                 clean();
-                printf("Data inválida!");
+                printf("Data inválida!\n");
                 break;
             }
+
             if (confirmar() == 0) break;
             clean();
-            switch (criar_despesas(l,data, numero, despesa, descricao)) {
+
+            switch (criar_despesas(l, data, numero, despesa, descricao)) {
                 case 0:
                     printf("Não foi possível criar a despesa\n");
                     break;
@@ -444,6 +438,7 @@ int menu(lista *l) {
                     reescreve_ficheiro(l);
                     break;
             };
+            printf("----------------------------------------------------\n");
             break;
         }
         case 7: //TODO Falta implementar uma função que diga se as despesas estão vazias
@@ -452,10 +447,12 @@ int menu(lista *l) {
             numero = pede_numero();
             if (verifica_numero(numero) == 1) {
                 clean();
-                printf("Número inválido\n");
+                printf("Não foi encontrado nenhum aluno com este número\n");
+                printf("----------------------------------------------------\n");
                 break;
             }
-            mostrar_despesas(l,numero);
+            clean();
+            mostrar_despesas(l, numero);
             break;
         case 8: { // ! Carregar conta de um aluno
             printf("Carregando conta de um aluno...\n");
@@ -470,13 +467,14 @@ int menu(lista *l) {
                 printf("----------------------------------------------------\n");
                 break;
             }
+
             if (confirmar() == 0) break;
             clean();
+
             if (carregar_conta(l, numero, saldo)) {
                 printf("Conta carregada com sucesso\n");
                 reescreve_ficheiro(l);
-            }
-            else printf("Não foi possível carregar a conta\n");
+            } else printf("Não foi possível carregar a conta\n");
             printf("----------------------------------------------------\n");
             break;
         }
