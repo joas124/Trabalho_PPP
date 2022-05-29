@@ -66,26 +66,6 @@ ALUNO * procurar_aluno(lista *l, int numero) {
 }
 
 /*
-    ! Função Auxiliar para converter datas
-    Converte uma data DD/MM/AAAA em dias para
-    poder comparar datas mais facilmente
-    Retorna -1 se não conseguir converter
-    Se conseguir, retorna o número de dias
-    (Dá demasiado trabalho, vou desistir dela só)
-*/
-
-int converte_data(DATA *data){
-    if (verifica_data(data) == 0) return -1;
-    int d = data->dia;
-    int anosbis = (data->ano % 4) - (data->ano - len(data->ano) + 2);
-    int meses[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    d += (data->ano - anosbis)*365 + anosbis*366;
-    for (int i = 0; i < data->mes -2; ++i){
-        d += meses[i];
-        }
-    return d;
-}
-/*
     ! Compara duas datas para ver qual a mais recente
     Retorna 1 se a principal for mais recente ou caso sejam iguais
     Retorna 0 se a principal for mais antiga
@@ -93,7 +73,7 @@ int converte_data(DATA *data){
     (Desisti de ordenar a lista de despessas, apenas ignore)
 */
 int compara_data(DATA *dataprincipal, DATA *datacomp){
-    if ((verifica_data(dataprincipal) && verifica_data(datacomp)) == 0) return -1;
+    if ((verifica_data(dataprincipal) && verifica_data(datacomp)) == 1) return -1;
     if (datacomp->ano > dataprincipal->ano) return 0;
     if ((datacomp->ano == dataprincipal->ano) && (datacomp->mes > dataprincipal->mes)) return 0;
     if ((datacomp->ano == dataprincipal->ano) && (datacomp->mes == dataprincipal->mes) && (datacomp->dia > dataprincipal->dia)) return 0;
@@ -102,19 +82,24 @@ int compara_data(DATA *dataprincipal, DATA *datacomp){
 
 /*
     ! Mostra as despesas de um aluno
+    Retorna 1 se o aluno tiver despesas
+    Retorna 0 se o aluno não tiver despesas
+    Retorna -1 se não existir um aluno com o número inserido
     Chama a função de procurar o aluno
 */
 
-void mostrar_despesas(lista *l, int numero) {
-    if (l == NULL) return;
+int mostrar_despesas(lista *l, int numero) {
+    if (l == NULL) return -1;
     ALUNO *aluno = procurar_aluno(l, numero);
-    if (aluno == NULL) return;
+    if (aluno == NULL) return -1;
     NO_DESPESAS *desp = aluno->despesas->inicio;
+    if (desp == NULL) return 0;
     while (desp != NULL) {
         printf("%s: %.02lf | %d/%d/%d\n", desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,
                 desp->despesa.data.mes, desp->despesa.data.ano);
         desp = desp->proximo;
     }
+    return 1;
 }
 /*
     ! Inicializa as depesas de um aluno
@@ -143,16 +128,34 @@ int criar_despesas(lista *l, DATA data, int numero, double montante, const char 
     ALUNO *aluno = procurar_aluno(l, numero);
     NO_DESPESAS *nova_despesa = malloc(sizeof(NO_DESPESAS));
     DESPESAS *despesa = malloc(sizeof (DESPESAS));
-    if ((nova_despesa == NULL) || (aluno == NULL)) return 0; //Verifica se consegui alocar espaço para a despesa e o aluno foi encontrado
+    if ((nova_despesa == NULL) || (aluno == NULL)) return 0; //Verifica se consegue alocar espaço para a despesa e se o aluno foi encontrado
     if (aluno->saldo < montante) return -1; //Retorna caso o aluno não tenha saldo suficiente
     aluno->saldo -= montante; //Subtrair a despesa do saldo do aluno
     despesa->valor = montante;
     despesa->data = data;
     strcpy(despesa->descricao,descricao);
-    nova_despesa->despesa = *despesa;
-    nova_despesa->proximo = aluno->despesas->inicio;
-    aluno->despesas->inicio = nova_despesa;
-    ++aluno->ndespesas;
+    nova_despesa->despesa = *despesa; // Passa a estrutura da despesa para o nó por parâmetro
+    NO_DESPESAS *aux = aluno->despesas->inicio; // Ponteiro auxiliar para poder percorrer a lista de despesas
+    if (aux == NULL || compara_data(&data, &aux->despesa.data)) { // Caso a lista esteja nula ou a primeiro despesa é mais antiga que a nova despesa
+        nova_despesa->proximo = aluno->despesas->inicio;
+        aluno->despesas->inicio = nova_despesa;
+    } else{
+        NO_DESPESAS *anterior = aux; // Ponteiro para guardar o antigo valor do aux
+        while (aux != NULL){
+            if (compara_data(&data, &aux->despesa.data)){ // Caso a data da despesa seja mais recente que a data da despesa auxiliar
+                nova_despesa->proximo = aux;
+                anterior->proximo = nova_despesa;
+                break;
+            }else if (aux->proximo == NULL) { // Caso a data da despeja seja mais antiga que todas as despesas existentes na lista
+                nova_despesa->proximo = NULL;
+                anterior->proximo = nova_despesa;
+                break;
+            }
+            anterior = aux; // Ponteiro anterior guarda o auxiliar
+            aux = aux->proximo; // Auxiliar passa para o próximo
+        }
+    }
+    ++aluno->num_despesas; // Adicionar o número de despesas
     return 1;
 }
 

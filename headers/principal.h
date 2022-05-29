@@ -32,7 +32,7 @@ typedef struct aluno {
     TURMA turma;
     int numero; // numero de estudante
     double saldo; // só numeros positivos
-    int ndespesas; // Dá puta jeito guardar o número de despesas de um aluno
+    int num_despesas; // Dá puta jeito guardar o número de despesas de um aluno
     LISTA_DESPESAS *despesas; // antes era um pointer para uma só despesa, agora é para a lista ligada de despesas
 } ALUNO;
 

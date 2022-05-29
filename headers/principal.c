@@ -3,17 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h> 
+#include <ctype.h>
 
 #define MAX_NOME 100
 #define MAX_TURMA 10
 
 void clean() {
-    #if defined(_WIN32)
-        // system("cls"); /* Não está disponivel para o CLion (provavelmenta buga) */
-    #else
-        system("clear");
-    #endif
+#if defined(_WIN32)
+    // system("cls"); /* Não está disponivel para o CLion (provavelmenta buga) */
+#else
+    system("clear");
+#endif
 }
 
 /*
@@ -27,11 +27,11 @@ int reescreve_ficheiro(lista *l) {
     no_lista *aux = l->inicio;
     while (aux != NULL) {
         aux->aluno.nome[strlen(aux->aluno.nome)] = '\0'; // Quick fix no ficheiro
-        fprintf(f, "%s | %d/%d/%d | %d | %s | %d | %.2f | %d\n", aux->aluno.nome, aux->aluno.data_nascimento.dia,
+        fprintf(f, "%s| %d/%d/%d | %d | %s | %d | %.2f | %d\n", aux->aluno.nome, aux->aluno.data_nascimento.dia,
                 aux->aluno.data_nascimento.mes, aux->aluno.data_nascimento.ano, aux->aluno.turma.ano,
-                aux->aluno.turma.sigla, aux->aluno.numero, aux->aluno.saldo, aux->aluno.ndespesas);
+                aux->aluno.turma.sigla, aux->aluno.numero, aux->aluno.saldo, aux->aluno.num_despesas);
         NO_DESPESAS *aux_d = aux->aluno.despesas->inicio;
-        while(aux_d != NULL){
+        while (aux_d != NULL) {
             fprintf(f, "%s: %.02lf | %d/%d/%d\n", aux_d->despesa.descricao, aux_d->despesa.valor,
                     aux_d->despesa.data.dia, aux_d->despesa.data.mes, aux_d->despesa.data.ano);
             aux_d = aux_d->proximo;
@@ -52,25 +52,35 @@ int inicializa_lista(lista *l) {
     l->inicio = NULL;
     FILE *file = fopen("../alunos.txt", "r");
     if (file == NULL) return 0;
-    ALUNO * a = malloc(sizeof(ALUNO));
+    ALUNO *a = malloc(sizeof(ALUNO));
     if (a == NULL) {
         free(a);
         return 0;
     }
     char line_aluno[MAX_NOME + MAX_TURMA + 100 + 10 + 10 + 10];
     while (fgets(line_aluno, sizeof(line_aluno), file) != NULL) {
-        sscanf(line_aluno, "%[^|] | %d/%d/%d | %d | %s | %d | %lf | %d:", a->nome, &a->data_nascimento.dia, &a->data_nascimento.mes, &a->data_nascimento.ano, &a->turma.ano, a->turma.sigla, &a->numero, &a->saldo, &a->ndespesas);
+        sscanf(line_aluno, "%[^|]| %d/%d/%d | %d | %s | %d | %lf | %d:", a->nome, &a->data_nascimento.dia,
+               &a->data_nascimento.mes, &a->data_nascimento.ano, &a->turma.ano, a->turma.sigla, &a->numero, &a->saldo,
+               &a->num_despesas);
+        a->nome[strlen(a->nome)-1] = '\0';
         LISTA_DESPESAS *d = malloc(sizeof(LISTA_DESPESAS));
         d->inicio = NULL;
-        for (int i = 0; i < a->ndespesas; ++i){
+        for (int i = 0; i < a->num_despesas; ++i) {
             fgets(line_aluno, sizeof(line_aluno), file);
-            NO_DESPESAS *no = malloc(sizeof (NO_DESPESAS));
-            DESPESAS *despesa = malloc(sizeof (NO_DESPESAS));
+            NO_DESPESAS *no = malloc(sizeof(NO_DESPESAS));
+            DESPESAS *despesa = malloc(sizeof(DESPESAS));
             if (no == NULL || despesa == NULL) return 0;
-            sscanf(line_aluno, "%[^:]: %lf | %d/%d/%d", &despesa->descricao, &despesa->valor, &despesa->data.dia, &despesa->data.mes, &despesa->data.ano);
+            sscanf(line_aluno, "%[^:]: %lf | %d/%d/%d", despesa->descricao, &despesa->valor, &despesa->data.dia,
+                   &despesa->data.mes, &despesa->data.ano);
             no->despesa = *despesa;
-            no->proximo = d->inicio;
-            d->inicio = no;
+            no->proximo = NULL;
+            NO_DESPESAS *aux = d->inicio; // Ponteiro auxiliar para navegar a lista
+            if (aux == NULL){ // Caso a lista esteja vazia (primeira ocorrência)
+                d->inicio = no;
+            }else {
+                while (aux->proximo != NULL) aux = aux->proximo; // Percorrer a lista até o ultimo elemento
+                aux->proximo = no; // Novo elemento é o último (porque as despesas estão em ordem decrescente de data)
+            }
         }
         a->despesas = d;
         inserir_aluno(l, a, 0);
@@ -88,11 +98,13 @@ int inicializa_lista(lista *l) {
 int aluno_ficheiro(ALUNO *aluno) {
     FILE *file = fopen("../alunos.txt", "a+");
     if (file == NULL) return 0;
-    fprintf(file, "%s | %d/%d/%d | %d | %s | %d | %.2lf | %d\n", aluno->nome, aluno->data_nascimento.dia, aluno->data_nascimento.mes, aluno->data_nascimento.ano, aluno->turma.ano, aluno->turma.sigla, aluno->numero, aluno->saldo, aluno->ndespesas);
+    fprintf(file, "%s | %d/%d/%d | %d | %s | %d | %.2lf | %d\n", aluno->nome, aluno->data_nascimento.dia,
+            aluno->data_nascimento.mes, aluno->data_nascimento.ano, aluno->turma.ano, aluno->turma.sigla, aluno->numero,
+            aluno->saldo, aluno->num_despesas);
     NO_DESPESAS *aux = aluno->despesas->inicio;
-    while (aux != NULL){
-        fprintf(file, "%s: %d | %d/%d/%d", aux->despesa.descricao,aux->despesa.valor,
-                aux->despesa.data.dia,aux->despesa.data.mes,aux->despesa.data.ano);
+    while (aux != NULL) {
+        fprintf(file, "%s: %d | %d/%d/%d", aux->despesa.descricao, aux->despesa.valor,
+                aux->despesa.data.dia, aux->despesa.data.mes, aux->despesa.data.ano);
         aux = aux->proximo;
     }
     fclose(file);
@@ -104,7 +116,7 @@ int aluno_ficheiro(ALUNO *aluno) {
     * Return 1 se inseriu com sucesso
     * Return 0 se não inseriu
 */
-int inserir_aluno(lista *l, ALUNO *aluno, int toggler) { //TODO O primeiro aluno da lista passa para o último???
+int inserir_aluno(lista *l, ALUNO *aluno, int toggler) {
     if (l == NULL) return 0; // se não existir nenhum aluno com esse numero
     if (procurar_aluno(l, aluno->numero) != NULL) {
         printf("Já existe um aluno com o número inserido\n");
@@ -183,7 +195,6 @@ int ordena_alfabeticamente(lista *l) {
 
 /*
     ! Mostrar os alunos com saldo abaixo de um determinado valor (decrescente)
-    TODO: Provavelmente há uma maneira mais eficaz de fazer isso (NÃO FAZER UMA FUNÇÃO QUE PERCORRE A LISTA "l" MAIS DE UMA VEZ)
 */
 void listar_alunos_saldo(lista *l, double saldo) {
     if (l == NULL) return;
@@ -196,16 +207,15 @@ void listar_alunos_saldo(lista *l, double saldo) {
     while (atual != NULL) {
         double *saldoantigo = &atual->aluno.saldo;
         double *saldonovo = &novalista->inicio->aluno.saldo; // Só criei estas variáveis para o código dos if's ser menos poluído
-        if (*saldoantigo <= saldo && (novalista->inicio == NULL || *saldonovo <= *saldoantigo))
+        if (*saldoantigo <= saldo && (novalista->inicio == NULL || *saldonovo <=*saldoantigo))
         {                                              // Simplesmente adiciona um aluno ao topo da lista
             no_lista *novo = malloc(sizeof(no_lista)); // Aloca espaço na nova lista
             if (novo == NULL)
-                break; // TODO Talvez aqui seja melhor um return, mas ainda tenho de perguntar ao professor
+                break;
             novo->aluno = atual->aluno;
             novo->prox = novalista->inicio;
             novalista->inicio = novo;
-        }
-        else if (*saldoantigo <= saldo && *saldoantigo < *saldonovo)
+        } else if (*saldoantigo <= saldo && *saldoantigo < *saldonovo)
         {
             // Caso o saldo seja menor que o número, mas o primeiro elemento da lista nova seja maior
             no_lista *novo = malloc(sizeof(no_lista)); // Aloca espaço na nova lista
@@ -214,8 +224,7 @@ void listar_alunos_saldo(lista *l, double saldo) {
             novo->aluno = atual->aluno;
             auxatual = novalista->inicio;
             auxprox = novalista->inicio->prox;
-            while (auxatual->aluno.saldo > *saldonovo)
-            {
+            while (auxatual->aluno.saldo > *saldonovo) {
                 // Percorrer a lista nova até encontrar um elemento com menor saldo
                 auxatual = auxprox;
                 auxprox = auxatual->prox;
@@ -260,7 +269,7 @@ int carregar_conta(lista *l, int numero, double montante) {
         - Saldo
         - Despesas
 */
-ALUNO * pede_aluno() {
+ALUNO *pede_aluno() {
     int erro = 0; // quando erro = 1 a função return NULL
 
     // Pede Nome
@@ -298,7 +307,7 @@ ALUNO * pede_aluno() {
 
     // Confirma dados
     if (confirmar() == 0) return NULL; // Utilizador não confirmou
-    ALUNO * a = malloc(sizeof(ALUNO));
+    ALUNO *a = malloc(sizeof(ALUNO));
     if (a == NULL) {
         free(a);
         return NULL;
@@ -310,7 +319,7 @@ ALUNO * pede_aluno() {
     a->numero = numero;
     a->turma = turma;
     a->saldo = 0.00;
-    a->ndespesas = 0;
+    a->num_despesas = 0;
     inicializa_despesa(a);
 
     return a; // Retorna o aluno
@@ -337,7 +346,7 @@ int menu(lista *l) {
         }
         case 1: { // ! Inserir aluno
             printf("Intruduzindo um aluno...\n");
-            ALUNO * aluno = pede_aluno();
+            ALUNO *aluno = pede_aluno();
             if (aluno == NULL) {
                 printf("Aluno inválido\n");
                 printf("----------------------------------------------------\n");
@@ -367,7 +376,7 @@ int menu(lista *l) {
             printf("----------------------------------------------------\n");
             break;
         }
-        case 4: { // ! Imprimir alunos com saldo inferior a um determinado valor «« AINDA NÃO ACABADO
+        case 4: { // ! Imprimir alunos com saldo inferior a um determinado valor
             printf("Listando alunos pelo seu saldo...\n");
             printf("Digite o saldo máximo:");
             saldo = pede_montante();
@@ -401,7 +410,7 @@ int menu(lista *l) {
             printf("Efetuando uma despesa de um aluno...\n");
             printf("Digite o número do aluno: ");
             numero = pede_numero();
-            if (procurar_aluno(l, numero) == NULL){
+            if (procurar_aluno(l, numero) == NULL) {
                 clean();
                 printf("Número inválido\n");
                 break;
@@ -414,23 +423,24 @@ int menu(lista *l) {
                 break;
             }
             printf("Digite a descrição da despesa: ");
-            scanf("%s", descricao);
-            if (strlen(descricao) == 0){
+            while (getchar() != '\n');
+            scanf("%[^\n]", descricao);
+            if (strlen(descricao) == 0) {
                 clean();
                 printf("Descrição inválida\n");
                 break;
             }
             printf("Digite a data de faturação da despesa(DD/MM/AAAA): ");
-            scanf("%d/%d/%d",&data.dia, &data.mes, &data.ano);
+            scanf("%d/%d/%d", &data.dia, &data.mes, &data.ano);
             while (getchar() != '\n');
-            if (verifica_data(&data) == 1){
+            if (verifica_data(&data) == 1) {
                 clean();
-                printf("Data inválida!");
+                printf("Data inválida!\n");
                 break;
             }
             if (confirmar() == 0) break;
             clean();
-            switch (criar_despesas(l,data, numero, despesa, descricao)) {
+            switch (criar_despesas(l, data, numero, despesa, descricao)) {
                 case 0:
                     printf("Não foi possível criar a despesa\n");
                     break;
@@ -453,7 +463,16 @@ int menu(lista *l) {
                 printf("Número inválido\n");
                 break;
             }
-            mostrar_despesas(l,numero);
+            switch (mostrar_despesas(l, numero)) {
+                case -1:
+                    clean();
+                    printf("Não existe nenhum aluno com esse número\n");
+                    break;
+                case 0:
+                    clean();
+                    printf("O aluno não possui despesas\n");
+                    break;
+            }
             break;
         case 8: { // ! Carregar conta de um aluno
             printf("Carregando conta de um aluno...\n");
@@ -473,8 +492,7 @@ int menu(lista *l) {
             if (carregar_conta(l, numero, saldo)) {
                 printf("Conta carregada com sucesso\n");
                 reescreve_ficheiro(l);
-            }
-            else printf("Não foi possível carregar a conta\n");
+            } else printf("Não foi possível carregar a conta\n");
             printf("----------------------------------------------------\n");
             break;
         }
