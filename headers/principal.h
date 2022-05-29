@@ -69,7 +69,7 @@ int inicializa_lista(lista *l);
     * Return 1 se inseriu com sucesso
     * Return 0 se não conseguiu inserir
 */
-int aluno_ficheiro(ALUNO *aluno);
+int inserir_aluno_ficheiro(ALUNO *aluno);
 
 /*
     ! Inserir um novo aluno

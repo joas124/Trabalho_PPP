@@ -37,6 +37,19 @@ int imprime_nomes(lista *l) {
 }
 
 /*
+    ! Imprime nomes dos alunos ordem alfabetica e numero
+    * Return 1 se houver alguem na lista
+    * Return 0 se lista estiver vazia
+*/
+int imprime_nome_numero(lista *l) {
+    if (l == NULL) return 0;
+    no_lista *aux = l->inicio;
+    if (aux == NULL) return 0;
+    for (; aux != NULL; aux = aux->prox) printf("%d: %s\n", aux->aluno.numero, aux->aluno.nome);
+    return 1;
+}
+
+/*
     ! Imprime dados do aluno
 */
 void imprime_aluno(ALUNO *aluno) {
@@ -94,13 +107,16 @@ int mostrar_despesas(lista *l, int numero) {
     if (aluno == NULL) return -1;
     NO_DESPESAS *desp = aluno->despesas->inicio;
     if (desp == NULL) return 0;
+    printf("\nDespesas de: %s\n", aluno->nome);
     while (desp != NULL) {
+
         printf("%s: %.02lf | %d/%d/%d\n", desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,
                 desp->despesa.data.mes, desp->despesa.data.ano);
         desp = desp->proximo;
     }
     return 1;
 }
+
 /*
     ! Inicializa as depesas de um aluno
     Retorna 1 caso consiga inicializar
@@ -191,8 +207,7 @@ int len(int n) {
 */
 int verifica_nome(char *nome) {
     if (nome == NULL) return 1;
-    int i = 0;
-    for (; nome[i] != '\0'; i++) { // vai até o caracter da string que é '\0'
+    for (int i = 0; nome[i] != '\0'; i++) { // vai até o caracter da string que é '\0'
         if (toupper((nome[i]) < 'A' || toupper(nome[i]) > 'Z') && nome[i] != ' ') {
             return 1;
         }
@@ -237,6 +252,16 @@ int verifica_numero(int numero) {
     * Return 0 se for válida
 */
 int verifica_turma(TURMA *t) {
+    for (int i = 0; t->sigla[i] != '\0'; i++) {
+        if (toupper(t->sigla[i]) >= 'A' || toupper(t->sigla[i]) <= 'Z') {
+            t->sigla[i] = toupper(t->sigla[i]);
+        } else if (t->sigla[i] >= '0' || t->sigla[i] <= '9') {
+            continue;
+        } else {
+            return 0;
+        }
+    }
+    // Se a verificação em cima não der return a 0, então a vericidade da turma fica pelo ano
     return (t->ano < 1 || t->ano > 12);
 }
 
@@ -246,7 +271,7 @@ int verifica_turma(TURMA *t) {
     * Return 0 se for inválido
 */
 int verifica_saldo(double saldo) {
-    return saldo > 0;
+    return saldo >= 0; // pode ser de graça
 }
 
 /*

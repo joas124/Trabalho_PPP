@@ -8,8 +8,17 @@ void imprime_lista(lista *l);
 
 /*
     ! Imprime nomes dos alunos ordem alfabetica
+    * Return 1 se houver alguem na lista
+    * Return 0 se lista estiver vazia
 */
 int imprime_nomes(lista *l);
+
+/*
+    ! Imprime nomes dos alunos ordem alfabetica e numero
+    * Return 1 se houver alguem na lista
+    * Return 0 se lista estiver vazia
+*/
+int imprime_nome_numero(lista *l);
 
 /*
     ! Imprime dados do aluno
