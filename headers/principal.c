@@ -418,14 +418,14 @@ int menu(lista *l) {
             }
 
             printf("Digite a descrição da despesa: ");
-            while (getchar() != '\n');
-            scanf("%[^\n]", descricao);
+            fgets(descricao, 100, stdin);
             if (strlen(descricao) == 0) {
                 clean();
                 printf("Descrição inválida\n");
                 printf("----------------------------------------------------\n");
                 break;
             }
+            descricao[strlen(descricao) - 1] = '\0'; // Troca o '\n' do fim da string
             printf("Digite a data de faturação da despesa(DD/MM/AAAA): ");
             scanf("%d/%d/%d", &data.dia, &data.mes, &data.ano);
             while (getchar() != '\n');
@@ -453,7 +453,7 @@ int menu(lista *l) {
             printf("----------------------------------------------------\n");
             break;
         }
-        case 7: //TODO Falta implementar uma função que diga se as despesas estão vazias
+        case 7:
             printf("Listando as despesas de um aluno..\n");
             printf("Digite o número do aluno: ");
             numero = pede_numero();
