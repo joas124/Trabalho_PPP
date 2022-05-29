@@ -53,15 +53,14 @@ int inicializa_lista(lista *l) {
     FILE *file = fopen("../alunos.txt", "r");
     if (file == NULL) return 0;
     ALUNO * a = malloc(sizeof(ALUNO));
-    LISTA_DESPESAS *d = malloc(sizeof(LISTA_DESPESAS));
-    if (a == NULL || d == NULL) {
+    if (a == NULL) {
         free(a);
-        free(d);
         return 0;
     }
     char line_aluno[MAX_NOME + MAX_TURMA + 100 + 10 + 10 + 10];
     while (fgets(line_aluno, sizeof(line_aluno), file) != NULL) {
         sscanf(line_aluno, "%[^|] | %d/%d/%d | %d | %s | %d | %lf | %d:", a->nome, &a->data_nascimento.dia, &a->data_nascimento.mes, &a->data_nascimento.ano, &a->turma.ano, a->turma.sigla, &a->numero, &a->saldo, &a->ndespesas);
+        LISTA_DESPESAS *d = malloc(sizeof(LISTA_DESPESAS));
         d->inicio = NULL;
         for (int i = 0; i < a->ndespesas; ++i){
             fgets(line_aluno, sizeof(line_aluno), file);
@@ -69,7 +68,6 @@ int inicializa_lista(lista *l) {
             DESPESAS *despesa = malloc(sizeof (NO_DESPESAS));
             if (no == NULL || despesa == NULL) return 0;
             sscanf(line_aluno, "%[^:]: %lf | %d/%d/%d", &despesa->descricao, &despesa->valor, &despesa->data.dia, &despesa->data.mes, &despesa->data.ano);
-            printf(line_aluno, "%[^:]: %lf | %d/%d/%d", despesa->descricao, despesa->valor, despesa->data.dia, despesa->data.mes, despesa->data.ano);
             no->despesa = *despesa;
             no->proximo = d->inicio;
             d->inicio = no;
@@ -106,7 +104,7 @@ int aluno_ficheiro(ALUNO *aluno) {
     * Return 1 se inseriu com sucesso
     * Return 0 se não inseriu
 */
-int inserir_aluno(lista *l, ALUNO *aluno, int toggler) {
+int inserir_aluno(lista *l, ALUNO *aluno, int toggler) { //TODO O primeiro aluno da lista passa para o último???
     if (l == NULL) return 0; // se não existir nenhum aluno com esse numero
     if (procurar_aluno(l, aluno->numero) != NULL) {
         printf("Já existe um aluno com o número inserido\n");
