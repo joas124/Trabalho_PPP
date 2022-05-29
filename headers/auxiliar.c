@@ -37,6 +37,19 @@ int imprime_nomes(lista *l) {
 }
 
 /*
+    ! Imprime nomes dos alunos ordem alfabetica e numero
+    * Return 1 se houver alguem na lista
+    * Return 0 se lista estiver vazia
+*/
+int imprime_nome_numero(lista *l) {
+    if (l == NULL) return 0;
+    no_lista *aux = l->inicio;
+    if (aux == NULL) return 0;
+    for (; aux != NULL; aux = aux->prox) printf("%d: %s\n", aux->aluno.numero, aux->aluno.nome);
+    return 1;
+}
+
+/*
     ! Imprime dados do aluno
 */
 void imprime_aluno(ALUNO *aluno) {
@@ -73,7 +86,6 @@ ALUNO * procurar_aluno(lista *l, int numero) {
     Se conseguir, retorna o número de dias
     (Dá demasiado trabalho, vou desistir dela só)
 */
-
 int converte_data(DATA *data){
     if (verifica_data(data) == 0) return -1;
     int d = data->dia;
@@ -85,6 +97,7 @@ int converte_data(DATA *data){
         }
     return d;
 }
+
 /*
     ! Compara duas datas para ver qual a mais recente
     Retorna 1 se a principal for mais recente ou caso sejam iguais
@@ -104,28 +117,30 @@ int compara_data(DATA *dataprincipal, DATA *datacomp){
     ! Mostra as despesas de um aluno
     Chama a função de procurar o aluno
 */
-
 void mostrar_despesas(lista *l, int numero) {
     if (l == NULL) return;
     ALUNO *aluno = procurar_aluno(l, numero);
     if (aluno == NULL) return;
     NO_DESPESAS *desp = aluno->despesas->inicio;
+    printf("\nDespesas de: %s\n", aluno->nome);
     while (desp != NULL) {
         printf("%s: %.02lf | %d/%d/%d\n", desp->despesa.descricao, desp->despesa.valor, desp->despesa.data.dia,
                 desp->despesa.data.mes, desp->despesa.data.ano);
         desp = desp->proximo;
     }
+    printf("----------------------------------------------------\n");
 }
+
 /*
     ! Inicializa as depesas de um aluno
-    Retorna 1 caso consiga inicializar
-    Retorna 0 caso contrário
+    * Retorna 1 caso consiga inicializar
+    * Retorna 0 caso contrário
     (Criado para resolver um bug que acontecia
     caso o aluno não possuísse despesas ao ser
     lido do ficheiro)
- */
-int inicializa_despesa(ALUNO *a){
-    a->despesas = malloc(sizeof (LISTA_DESPESAS));
+*/
+int inicializa_despesa(ALUNO *a) {
+    a->despesas = malloc(sizeof(LISTA_DESPESAS));
     if (a->despesas == NULL) return 0;
     a->despesas->inicio = NULL;
     return 1;
@@ -152,7 +167,7 @@ int criar_despesas(lista *l, DATA data, int numero, double montante, const char 
     nova_despesa->despesa = *despesa;
     nova_despesa->proximo = aluno->despesas->inicio;
     aluno->despesas->inicio = nova_despesa;
-    ++aluno->ndespesas;
+    ++aluno->num_despesas;
     return 1;
 }
 
@@ -188,8 +203,7 @@ int len(int n) {
 */
 int verifica_nome(char *nome) {
     if (nome == NULL) return 1;
-    int i = 0;
-    for (; nome[i] != '\0'; i++) { // vai até o caracter da string que é '\0'
+    for (int i = 0; nome[i] != '\0'; i++) { // vai até o caracter da string que é '\0'
         if (toupper((nome[i]) < 'A' || toupper(nome[i]) > 'Z') && nome[i] != ' ') {
             return 1;
         }
@@ -234,6 +248,16 @@ int verifica_numero(int numero) {
     * Return 0 se for válida
 */
 int verifica_turma(TURMA *t) {
+    for (int i = 0; t->sigla[i] != '\0'; i++) {
+        if (toupper(t->sigla[i]) >= 'A' || toupper(t->sigla[i]) <= 'Z') {
+            t->sigla[i] = toupper(t->sigla[i]);
+        } else if (t->sigla[i] >= '0' || t->sigla[i] <= '9') {
+            continue;
+        } else {
+            return 0;
+        }
+    }
+    // Se a verificação em cima não der return a 0, então a vericidade da turma fica pelo ano
     return (t->ano < 1 || t->ano > 12);
 }
 
@@ -243,7 +267,7 @@ int verifica_turma(TURMA *t) {
     * Return 0 se for inválido
 */
 int verifica_saldo(double saldo) {
-    return saldo > 0;
+    return saldo >= 0; // pode ser de graça
 }
 
 /*
