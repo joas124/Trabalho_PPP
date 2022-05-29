@@ -99,7 +99,7 @@ int inicializa_lista(lista *l) {
 int inserir_aluno_ficheiro(ALUNO *aluno) {
     FILE *f = fopen("../alunos.txt", "a");
     if (f == NULL) return 0;
-    fprintf(f, "%s | %d/%d/%d | %d | %s | %d | %.2lf | %d\n", aluno->nome, aluno->data_nascimento.dia, aluno->data_nascimento.mes, aluno->data_nascimento.ano, aluno->turma.ano, aluno->turma.sigla, aluno->numero, aluno->saldo, aluno->num_despesas);
+    fprintf(f, "%s| %d/%d/%d | %d | %s | %d | %.2lf | %d\n", aluno->nome, aluno->data_nascimento.dia, aluno->data_nascimento.mes, aluno->data_nascimento.ano, aluno->turma.ano, aluno->turma.sigla, aluno->numero, aluno->saldo, aluno->num_despesas);
     fclose(f);
     return 1;
 }
