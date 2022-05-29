@@ -93,7 +93,7 @@ int inserir_aluno_ficheiro(ALUNO *aluno) {
     * Return 1 se inseriu com sucesso
     * Return 0 se não inseriu
 */
-int inserir_aluno(lista *l, ALUNO *aluno, int toggler) {
+int inserir_aluno(lista *l, ALUNO *aluno, int toggler) { //TODO O primeiro aluno da lista passa para o último???
     if (l == NULL) return 0; // se não existir nenhum aluno com esse numero
     if (procurar_aluno(l, aluno->numero) != NULL) {
         printf("Já existe um aluno com o número inserido\n");
