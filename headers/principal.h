@@ -1,6 +1,8 @@
 #ifndef TRABALHO_H_HEADERS_PRINCIPAL_H
 #define TRABALHO_H_HEADERS_PRINCIPAL_H
 
+#define ALUNOS_FILE "../alunos.txt"
+
 typedef struct data {
     int dia, mes, ano;
 } DATA;
@@ -12,7 +14,7 @@ typedef struct turma {
 
 typedef struct despesas {
     double valor;
-    char descricao[100];
+    char descricao[101];
     DATA data;
 } DESPESAS;
 
@@ -24,7 +26,6 @@ typedef struct no_despesas {
 typedef struct lista_despesas{
     struct no_despesas *inicio;
 } LISTA_DESPESAS;
-
 
 typedef struct aluno {
     char nome[101];
@@ -46,23 +47,35 @@ typedef struct lista {
 } lista;
 
 /*
-    ! Apaga a consola
+    ! Inicializa a lista
+    * Return 1 se inicializou com sucesso
+    * Return 0 se não conseguiu inicializar
+    nome: dia/mes/ano | ano | sigla | numero | saldo | num_despesas
+    despesa: valor | dia/mes/ano
 */
-void clean();
+int inicializa_lista(lista *l);
 
 /*
-    ! Refaz o ficheiro de alunos
+    ! Inicializa as depesas de um aluno
+    * Retorna 1 caso consiga inicializar
+    * Retorna 0 caso contrário
+*/
+int inicializa_despesa(ALUNO *a);
+
+/*
+    ! Cria a despesa para um aluno
+    * Se conseguir criar da return a 1
+    * Caso contrário, da return a 0
+    * Se o aluno não tiver saldo suficiente, dá return a "-1"
+*/
+int criar_despesas(lista *l, DATA data, int numero, double montante, const char descricao[]);
+
+/*
+    ! Reescreve o ficheiro dos alunos
     * Return 1 se conseguiu
     * Return 0 se não conseguiu
 */
 int reescreve_ficheiro(lista *l);
-
-/*
-    ! Inicializa a lista
-    * Return 1 se inicializou com sucesso
-    * Return 0 se não conseguiu inicializar
-*/
-int inicializa_lista(lista *l);
 
 /*
     ! Inserir aluno no ficheiro
@@ -72,21 +85,6 @@ int inicializa_lista(lista *l);
 int inserir_aluno_ficheiro(ALUNO *aluno);
 
 /*
-    ! Inserir um novo aluno
-    * Return 1 se inseriu com sucesso
-    * Return 0 se não inseriu
-*/
-int inserir_aluno(lista * l, ALUNO *aluno, int toggler);
-
-
-/*
-    ! Eliminar um aluno
-    * Return 1 se eliminou com sucesso
-    * Return 0 se não eliminou
-*/
-int eliminar_aluno(lista *l, int numero);
-
-/*
     ! Ordenar por ordem alfabética
     * Return 1 se ordenou com sucesso
     * Return 0 se não ordenou
@@ -94,23 +92,11 @@ int eliminar_aluno(lista *l, int numero);
 int ordena_alfabeticamente(lista *l);
 
 /*
-    ! Listar os alunos com saldo abaixo de um determinado valor (decrescente)
+    ! Ordenar por saldo decrescente
+    * Return 1 se ordenou com sucesso
+    * Return 0 se não ordenou
 */
-void listar_alunos_saldo(lista * l, double saldo);
-
-/*
-    ! Carregar conta de um aluno
-    * Return 1 se carregou com sucesso
-    * Return 0 se não carregou
-*/
-int carregar_conta(lista *l, int numero, double montante);
-
-/*
-    ! Pede alunos
-    * Return ponteiro para lista de alunos se tudo correu bem
-    * Return NULL se algum dos dados foi inserido incorretamente
-*/
-ALUNO * pede_aluno();
+int ordena_saldo(lista *l);
 
 /*
     ! Mostra o menu completo
