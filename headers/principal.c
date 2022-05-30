@@ -306,7 +306,7 @@ int menu(lista *l) {
 
             printf("Digite o valor para carregar: ");
             saldo = pede_montante();
-            if (verifica_saldo(saldo) == 0) {
+            if (!verifica_saldo(saldo)) {
                 clean();
                 printf("Montante não válido\n");
                 separador();
