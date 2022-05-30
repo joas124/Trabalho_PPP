@@ -1,6 +1,3 @@
-Joas Silva| 16/7/2003 | 12 | 2F3JS | 2021226149 | 385.99 | 1
-Iogurtes da danone: 24.02 | 25/5/2022
-Joaquim Melo| 11/11/2011 | 11 | FGAS | 2021219162 | 0.00 | 0
-Filipe Rodrigues| 20/11/2003 | 11 | ASD | 2021218054 | 4.51 | 3
-Meninas: 5.49 | 28/5/2022
-Mel: 10.04 | 22/5/2022
+Joas Silva: 16/7/2003 | 12 | 2F3JS | 2021226149 | 69.69 | 0
+Filipe Rodrigues: 20/11/2003 | 11 | ASD | 2021218054 | 62.51 | 1
+Croissant: 6.49 | 30/5/2022
