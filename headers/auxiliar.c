@@ -76,9 +76,9 @@ void imprime_aluno(ALUNO *aluno) {
 }
 
 int imprime_nomes(lista *l) {
-    no_lista *aux = l->inicio;
-    if (aux == NULL) return 0;
-    for (; aux != NULL; aux = aux->prox) printf("%s\n", aux->aluno.nome);
+    no_lista *a = l->inicio;
+    if (a == NULL) return 0;
+    for (; a != NULL; a = a->prox) printf("%s (%d)\n", a->aluno.nome, a->aluno.numero);
     return 1;
 }
 
