@@ -9,7 +9,7 @@
 int inicializa_lista(lista *l) {
     if (l == NULL) return 0;
     l->inicio = NULL;
-    FILE *f = fopen(ALUNOS_FILE, "r");
+    FILE *f = fopen(ALUNOS_FILE, "a+");
     if (f == NULL) return 0;
     ALUNO *a = malloc(sizeof(ALUNO));
     if (a == NULL) return 0;
