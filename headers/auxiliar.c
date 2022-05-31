@@ -9,7 +9,7 @@
 
 void clean() {
     #if defined(_WIN32)
-        // system("cls"); /* Não está disponivel para o CLion (provavelmenta buga) */
+        system("cls"); /* Não está disponivel para o CLion (provavelmenta buga) */
     #else
         system("clear");
     #endif

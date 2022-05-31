@@ -51,12 +51,12 @@ int inicializa_despesa(ALUNO *a) {
     return 1;
 }
 
-int criar_despesas(lista *l, DATA data, int numero, double montante, const char descricao[]){
+int criar_despesa(lista *l, DATA data, int numero, double montante, const char descricao[]){
     ALUNO *aluno = procurar_aluno(l, numero);
     if (aluno == NULL) return 0;
     NO_DESPESAS *nova_despesa = malloc(sizeof(NO_DESPESAS));
     DESPESAS *despesa = malloc(sizeof (DESPESAS));
-    if ((nova_despesa == NULL) || (aluno == NULL)) return 0; //Verifica se consegue alocar espaço para a despesa e se o aluno foi encontrado
+    if (nova_despesa == NULL || despesa == NULL) return 0; //Verifica se consegue alocar espaço para a despesa
     if (aluno->saldo < montante) return -1; //Retorna caso o aluno não tenha saldo suficiente
     aluno->saldo -= montante; //Subtrair a despesa do saldo do aluno
     despesa->valor = montante;
@@ -271,7 +271,7 @@ int menu(lista *l) {
 
             if (!confirmar()) break;
             clean();
-            int var = criar_despesas(l, data, numero, despesa, descricao);
+            int var = criar_despesa(l, data, numero, despesa, descricao);
             if (var == 0) printf("Não foi possível criar a despesa\n");
             else if (var == -1) printf("O aluno não possui saldo suficiente\n");
             else {

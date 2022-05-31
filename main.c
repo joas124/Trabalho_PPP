@@ -6,7 +6,7 @@
 
 int main() {
   lista l;
-  if (inicializa_lista(&l) == 0) {
+  if (!inicializa_lista(&l)) {
     printf("Erro ao inicializar a lista\n");
     return 0;
   }

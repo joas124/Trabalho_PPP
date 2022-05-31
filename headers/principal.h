@@ -68,7 +68,7 @@ int inicializa_despesa(ALUNO *a);
     * Caso contrário, da return a 0
     * Se o aluno não tiver saldo suficiente, dá return a "-1"
 */
-int criar_despesas(lista *l, DATA data, int numero, double montante, const char descricao[]);
+int criar_despesa(lista *l, DATA data, int numero, double montante, const char descricao[]);
 
 /*
     ! Reescreve o ficheiro dos alunos
