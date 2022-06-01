@@ -2,7 +2,6 @@
 #include "./headers/auxiliar.h"
 #include "./headers/alunos.h"
 #include <stdio.h>
-#include <stdlib.h>
 
 int main() {
   lista l;
