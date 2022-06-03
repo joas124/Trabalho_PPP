@@ -1,7 +1,7 @@
 #ifndef TRABALHO_H_HEADERS_PRINCIPAL_H
 #define TRABALHO_H_HEADERS_PRINCIPAL_H
 
-#define ALUNOS_FILE "../alunos.txt"
+#define ALUNOS_FILE "alunos.txt"
 
 typedef struct data {
     int dia, mes, ano;
