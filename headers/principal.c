@@ -134,6 +134,7 @@ int ordena_alfabeticamente(lista *l) {
 
 int ordena_saldo(lista *l) {
     no_lista *atual = l->inicio;
+    if (atual == NULL) return 0;
     for (; atual != NULL; atual = atual->prox) {
         no_lista *prox = atual->prox;
         for (; prox != NULL; prox = prox->prox) {
