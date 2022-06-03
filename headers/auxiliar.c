@@ -8,8 +8,8 @@
 #include <time.h>
 
 void clean() {
-    #if defined(_WIN32)
-        system("cls"); /* Nao está disponivel para o CLion (provavelmenta buga) */
+    #if defined(_WIN32) // se for windows
+        system("cls"); /* Nao está disponivel para o CLion -> rodar no Terminal */
     #else
         system("clear");
     #endif
@@ -41,7 +41,6 @@ void separador() {
 int confirmar() {
     char confirma[3];
     printf("Confirmar? (S/N): ");
-    // while (getchar() != '\n');
     fgets(confirma, 3, stdin);
     if(toupper(confirma[0]) == 'S') return 1;
     printf("Operacao cancelada\n");

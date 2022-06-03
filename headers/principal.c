@@ -9,7 +9,7 @@
 int inicializa_lista(lista *l) {
     if (l == NULL) return 0;
     l->inicio = NULL;
-    FILE *f = fopen(ALUNOS_FILE, "a+");
+    FILE *f = fopen(ALUNOS_FILE, "a+"); // a+ -> abre para leitura e escrita, cria se nao existir (não se usa a escrita)
     if (f == NULL) return 0;
     ALUNO *a = malloc(sizeof(ALUNO));
     if (a == NULL) return 0;
@@ -45,7 +45,7 @@ int inicializa_lista(lista *l) {
 }
 
 int inicializa_despesa(ALUNO *a) {
-    a->despesas = malloc(sizeof (LISTA_DESPESAS));
+    a->despesas = malloc(sizeof(LISTA_DESPESAS));
     if (a->despesas == NULL) return 0;
     a->despesas->inicio = NULL;
     return 1;
@@ -58,10 +58,12 @@ int criar_despesa(lista *l, DATA data, int numero, double montante, const char d
     DESPESAS *despesa = malloc(sizeof (DESPESAS));
     if (nova_despesa == NULL || despesa == NULL) return 0; //Verifica se consegue alocar espaco para a despesa
     if (aluno->saldo < montante) return -1; //Retorna caso o aluno nao tenha saldo suficiente
+    // Atualiza o saldo do aluno
     aluno->saldo -= montante; //Subtrair a despesa do saldo do aluno
     despesa->valor = montante;
     despesa->data = data;
-    strcpy(despesa->descricao,descricao);
+    // Parte de inserir a despesa
+    strcpy(despesa->descricao, descricao);
     nova_despesa->despesa = *despesa; // Passa a estrutura da despesa para o nó por parâmetro
     NO_DESPESAS *aux = aluno->despesas->inicio; // Ponteiro auxiliar para poder percorrer a lista de despesas
     if (aux == NULL || compara_data(&data, &aux->despesa.data)) { // Caso a lista esteja nula ou a primeiro despesa é mais antiga que a nova despesa
@@ -70,7 +72,7 @@ int criar_despesa(lista *l, DATA data, int numero, double montante, const char d
     } else {
         NO_DESPESAS *anterior = aux; // Ponteiro para guardar o antigo valor do aux
         while (aux != NULL){
-            if (compara_data(&data, &aux->despesa.data)){ // Caso a data da despesa seja mais recente que a data da despesa auxiliar
+            if (compara_data(&data, &aux->despesa.data)) { // Caso a data da despesa seja mais recente que a data da despesa auxiliar
                 nova_despesa->proximo = aux;
                 anterior->proximo = nova_despesa;
                 break;
@@ -92,14 +94,13 @@ int reescreve_ficheiro(lista *l) {
     if (f == NULL) return 0;
     no_lista *aux = l->inicio;
     for (; aux != NULL; aux = aux->prox) {
-        aux->aluno.nome[strlen(aux->aluno.nome)] = '\0'; // Quick fix no ficheiro
+        aux->aluno.nome[strlen(aux->aluno.nome)] = '\0'; // Quick fix no ficheiro -> de vez em quando ele lê um espaço a mais
         fprintf(f, "%s: %d/%d/%d | %d | %s | %d | %.2f | %d\n", aux->aluno.nome, aux->aluno.data_nascimento.dia,
                 aux->aluno.data_nascimento.mes, aux->aluno.data_nascimento.ano, aux->aluno.turma.ano,
                 aux->aluno.turma.sigla, aux->aluno.numero, aux->aluno.saldo, aux->aluno.num_despesas);
         NO_DESPESAS *aux_d = aux->aluno.despesas->inicio;
         for (; aux_d != NULL; aux_d = aux_d->proximo) {
-            fprintf(f, "%s: %.2f | %d/%d/%d\n", aux_d->despesa.descricao, aux_d->despesa.valor,
-                    aux_d->despesa.data.dia, aux_d->despesa.data.mes, aux_d->despesa.data.ano);
+            fprintf(f, "%s: %.2f | %d/%d/%d\n", aux_d->despesa.descricao, aux_d->despesa.valor, aux_d->despesa.data.dia, aux_d->despesa.data.mes, aux_d->despesa.data.ano);
         }
     }
     fclose(f);
@@ -121,14 +122,14 @@ int ordena_alfabeticamente(lista *l) {
         no_lista *prox = atual->prox;
         for (; prox != NULL; prox = prox->prox) {
             if (strcmp(atual->aluno.nome, prox->aluno.nome) > 0) {
-                ALUNO aux = atual->aluno;   // Guardar o aluno atual
-                atual->aluno = prox->aluno; // Substituir o aluno atual pelo proximo
-                prox->aluno = aux;         // Substituir o proximo pelo aluno atual
+                ALUNO temp = atual->aluno;   // Guardar o aluno atual numa variavel temporaria
+                atual->aluno = prox->aluno;  // Substituir o aluno atual pelo proximo
+                prox->aluno = temp;          // Substituir o proximo pelo aluno atual (que estava guardado na variavel temporaria)
             }
         }
     }
     reescreve_ficheiro(l);
-    return 1; // Sucesso
+    return 1;
 }
 
 int ordena_saldo(lista *l) {
@@ -137,13 +138,13 @@ int ordena_saldo(lista *l) {
         no_lista *prox = atual->prox;
         for (; prox != NULL; prox = prox->prox) {
             if (atual->aluno.saldo < prox->aluno.saldo) {
-                ALUNO aux = atual->aluno;   // guarda o aluno atual
-                atual->aluno = prox->aluno; // troca o aluno atual com o proximo
-                prox->aluno = aux;         // troca o proximo com o aluno atual
+                ALUNO temp = atual->aluno;   // Guardar o aluno atual numa variavel temporaria
+                atual->aluno = prox->aluno;  // Substituir o aluno atual pelo proximo
+                prox->aluno = temp;          // Substituir o proximo pelo aluno atual (que estava guardado na variavel temporaria)
             }
         }
     }
-    return 1; // Sucesso
+    return 1;
 }
 
 int menu(lista *l) {
@@ -154,10 +155,10 @@ int menu(lista *l) {
     opcoes(); // mostra as opcões
     printf("Digite o numero correspondente a operacao que quer realizar: ");
     int err = scanf("%d", &input);
-    if (err == 0) { // faz com que dê handle ao infinite loop do input
+    if (err == 0) { // faz com que dê handle quando se mete uma letra como input
         input = -1;
         while (getchar() != '\n'); // Apanha o ultimo '\n' para que nao interfira o input
-    } else if (err == EOF) { // faz com que dê handle ao infinite loop do input
+    } else if (err == EOF) { // faz com que dê handle ao infinite loop do input (caso de dar ctrl + D)
         clean();
         printf("Programa forcado a terminar\n");
         return 0;
@@ -225,7 +226,7 @@ int menu(lista *l) {
             imprime_aluno(procurar_aluno(l, numero));
             separador();
             break;
-        } case 6: {
+        } case 6: { // ! Efectuar um pagamento (criar despesa)
             printf("Efetuando uma despesa de um aluno...\n");
             printf("Digite o numero do aluno: ");
             numero = pede_numero();
@@ -274,7 +275,7 @@ int menu(lista *l) {
             }
             separador();
             break;
-        } case 7: {
+        } case 7: { // ! Listar as despesas de um aluno
             printf("Listando as despesas de um aluno..\n");
             printf("Digite o numero do aluno: ");
             numero = pede_numero();
