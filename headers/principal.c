@@ -15,7 +15,7 @@ int inicializa_lista(lista *l) {
     if (a == NULL) return 0;
     char line_aluno[MAX_LINE];
     while (fgets(line_aluno, sizeof(line_aluno), f) != NULL) {
-        sscanf(line_aluno, "%[^:]: %d/%d/%d | %d | %s | %d | %lf | %d:", a->nome, &a->data_nascimento.dia,
+        sscanf(line_aluno, "%[^:]: %d/%d/%d | %d | %s | %d | %lf | %d", a->nome, &a->data_nascimento.dia,
                 &a->data_nascimento.mes, &a->data_nascimento.ano, &a->turma.ano, a->turma.sigla, &a->numero, &a->saldo,
                 &a->num_despesas);
         LISTA_DESPESAS *d = malloc(sizeof(LISTA_DESPESAS));
