@@ -6,7 +6,7 @@ add_compile_options(-Wall -Wextra -Werror -executable)
 include(CTest)
 enable_testing()
 
-add_executable(trabalho main.c ../headers/principal.h ../headers/principal.c ../headers/auxiliar.h ../headers/auxiliar.c ../headers/alunos.h ../headers/alunos.c)
+add_executable(trabalho main.c ../headers/principal.c ../headers/auxiliar.c ../headers/alunos.c)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
