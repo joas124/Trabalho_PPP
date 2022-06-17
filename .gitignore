@@ -1,6 +1,4 @@
-HOLD/
 build/
 .vscode/
 cmake-build-debug/
 .idea/
-main.exe
