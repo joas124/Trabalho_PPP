@@ -129,7 +129,7 @@ int verifica_data(DATA * d) {
         d->ano % 4 != 0 && (d->ano % 100 == 0) && d->ano % 400 != 0) ||
         (d->mes == 4 && d->dia > 30) || (d->mes == 6 && d->dia > 30) ||
         (d->mes == 9 && d->dia > 30) || (d->mes == 11 && d->dia > 30) ||
-        (d->ano >  ano_atual || d->ano < 1980)) 
+        (d->ano >  ano_atual || d->ano < 1980))
     {
         return 0;
     }
